@@ -112,3 +112,5 @@ The Supabase Markdown changelog could not be fetched by the documentation browse
 - ADR-025: Existing restricted-role RLS and explicit organization predicates extend to imports/reservations. Composite foreign keys enforce tenant/property provenance. One modular FastAPI process remains authoritative.
 
 See [imports.md](imports.md) for implemented behavior and boundaries. Dependencies added: python-multipart for FastAPI uploads; jsdom and its TypeScript types for interactive React tests only. No storage SDK, queue, provider-specific importer or additional service is introduced.
+
+- ADR-026: Use Webpack explicitly for Next.js development to work around reported intermittent Turbopack nested-route 404s. Preserve the Docker bind hostname and the unchanged production build command. Rebuild/recreate the frontend image after changing the dev script because package.json is copied into the image. Reconsider this workaround after an upstream fix is verified; the intermittent failure was not reproducible during this change.
