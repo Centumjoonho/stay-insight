@@ -25,5 +25,7 @@ def test_database_configuration_without_connection() -> None:
         "app.organizations",
         "app.organization_members",
         "app.properties",
+        "app.reservation_imports",
+        "app.reservations",
     }
     engine.dispose()

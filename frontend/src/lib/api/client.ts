@@ -1,3 +1,5 @@
+import type { Channel, ColumnMapping, CsvPreview, ImportResult, ValidationResult } from "./import-types";
+import { importForm } from "@/lib/imports";
 import { browserAuth } from "@/lib/supabase/client";
 import { apiRequest, ApiError } from "./transport";
 import type { MeResponse, OrganizationResponse, PropertyCreate, PropertyResponse } from "./types";
@@ -19,6 +21,18 @@ async function request<T>(path: string, options?: RequestInit, organizationId?: 
 }
 
 export const businessApi = {
+  previewCsv: (file: File) => {
+    const body = new FormData(); body.set("file", file);
+    return request<CsvPreview>("/api/v1/imports/preview", { method: "POST", body });
+  },
+  validateImport: (org: string, property: string, channel: Channel, mapping: ColumnMapping, file: File) =>
+    request<ValidationResult>("/api/v1/imports/validate", {
+      method: "POST", body: importForm(file, property, channel, mapping),
+    }, org),
+  importCsv: (org: string, property: string, channel: Channel, mapping: ColumnMapping, file: File) =>
+    request<ImportResult>("/api/v1/imports", {
+      method: "POST", body: importForm(file, property, channel, mapping),
+    }, org),
   me: () => request<MeResponse>("/api/v1/me"),
   onboard: (organization_name: string) =>
     request<OrganizationResponse>("/api/v1/onboarding", {

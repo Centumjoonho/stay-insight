@@ -1,6 +1,6 @@
 # Stay Insight architecture
 
-Status: Phase 2 implements authentication, organization/membership and property foundations. Business PostgreSQL remains the local Docker PostGIS service; hosted Supabase is used only for Auth. The rest is target architecture.
+Status: Phase 3 implements generic CSV imports and normalized reservation reads alongside the Phase 2 authentication, organization/membership and property foundations. Business PostgreSQL remains the local Docker PostGIS service; hosted Supabase is used only for Auth. The rest is target architecture.
 
 ## System boundaries
 
@@ -38,7 +38,7 @@ Tenant responses default to `Cache-Control: private, no-store`, including server
 
 ## Imports, storage, and public ingestion
 
-Uploads pass through FastAPI into a private Storage bucket. The backend owns object names, organization checks, size/encoding checks, and retrieval. Browser credentials receive no bucket access. Keep server-only storage credentials separate from the runtime database identity; a storage credential must never become the business-query credential.
+Future storage design (deferred in Phase 3): uploads pass through FastAPI into a private Storage bucket. The backend owns object names, organization checks, size/encoding checks, and retrieval. Browser credentials receive no bucket access. Keep server-only storage credentials separate from the runtime database identity; a storage credential must never become the business-query credential.
 
 Bounded CSV preview/commit runs synchronously for the initial MVP. Persist an import state machine: uploaded, validated, rejected, committed, failed. Commit validates current source revisions and performs all business writes, lineage, and final state atomically. A failed commit leaves no partial business records. Use content hashes, stable source IDs, and a unique idempotency key; retried committed requests return their previous result. Do not rely on in-process background tasks for durable work.
 
@@ -101,3 +101,14 @@ Checked on 2026-09-22. These references support integration boundaries, not a cl
 The Supabase Markdown changelog could not be fetched by the documentation browser in this task. Recheck relevant current platform changes when scaffolding; no version-specific implementation is committed here.
 
 - ADR-019: NEXT_PUBLIC_SITE_URL is the explicit public origin for Auth email/callback and Proxy redirects. Never derive browser redirect origins from request.url or the Docker bind hostname. Production supplies its own build-time origin.
+
+## Phase 3 decisions
+
+- ADR-020: GenericCsvAdapter is the only implemented adapter. Source channel and parsing format remain separate; future provider adapters require real verified formats.
+- ADR-021: Retain the 5 MiB/10,000-row product limits and support strict CP949 fallback with a visible warning. Raw files are request-local and never retained; this overrides the future storage/retention proposal above for Phase 3.
+- ADR-022: Validation is a separate authenticated dry-run; commit always revalidates. Row errors block the whole batch. A savepoint rolls back all reservation writes on unexpected failure while allowing safe FAILED metadata.
+- ADR-023: SHA-256 plus property/channel prevents repeated completed files; a transaction advisory lock serializes imports within that scope. Stable property/channel/external IDs drive upserts, with explicit user acknowledgement in the UI.
+- ADR-024: Use Decimal/NUMERIC(18,0) for exact whole KRW per the Phase 3 request. Net is derived only from supplied gross and fee. Reservation records are not actual-stay KPI facts; no metric computation is added.
+- ADR-025: Existing restricted-role RLS and explicit organization predicates extend to imports/reservations. Composite foreign keys enforce tenant/property provenance. One modular FastAPI process remains authoritative.
+
+See [imports.md](imports.md) for implemented behavior and boundaries. Dependencies added: python-multipart for FastAPI uploads; jsdom and its TypeScript types for interactive React tests only. No storage SDK, queue, provider-specific importer or additional service is introduced.

@@ -1,3 +1,4 @@
+import type { ImportResult, Page, Reservation } from "./import-types";
 import { redirect } from "next/navigation";
 import { serverAuth } from "@/lib/supabase/server";
 import { apiRequest, ApiError } from "./transport";
@@ -28,6 +29,8 @@ async function request<T>(path: string, organizationId?: string): Promise<T> {
 }
 
 export const serverApi = {
+  imports: (org: string, query: string) => request<Page<ImportResult>>("/api/v1/imports?" + query, org),
+  reservations: (org: string, query: string) => request<Page<Reservation>>("/api/v1/reservations?" + query, org),
   me: () => request<MeResponse>("/api/v1/me"),
   properties: (organizationId: string, offset = 0) =>
     request<PropertyListResponse>(`/api/v1/properties?limit=50&offset=${offset}`, organizationId),

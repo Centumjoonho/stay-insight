@@ -1,6 +1,6 @@
 # Stay Insight product specification
 
-Status: proposed MVP contract; no features are implemented.
+Status: broader MVP contract. Phases 1–3 implement the platform, authentication, property foundation and generic CSV reservation imports. Later financial/market capabilities below remain proposals. See imports.md for the current import contract; Phase 3 supports CP949 fallback, full-row upserts and request-local files, without room quantities, actual-stay confirmation or KPI computation.
 
 ## Purpose and audience
 

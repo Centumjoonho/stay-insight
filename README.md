@@ -142,3 +142,5 @@ Within Compose use `docker compose exec -T -e TEST_DATABASE_URL=postgresql+psyco
 In a browser, open `/`, follow the health link, and confirm `backend connected`. Stop the backend and reload `/health` to confirm `backend unavailable`, then restart it. No business data or production credentials are needed.
 
 See [Phase 2 verification](docs/phase2-verification.md) for current results and [Phase 1 verification](docs/bootstrap-verification.md) for the historical bootstrap report.
+
+Phase 3: [CSV import setup and manual test](docs/imports.md) · [verification report](docs/phase3-verification.md). Apply migration 0002_csv_imports after rebuilding; existing Auth settings and public redirect origin remain unchanged.

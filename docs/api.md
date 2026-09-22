@@ -54,3 +54,33 @@ List pagination: `limit` defaults to 50 (1–100), `offset` defaults to 0 (nonne
 Errors use FastAPI's detail response shape. The UI maps common errors to Korean messages and never renders raw database errors. Access tokens are not included in response models. CORS allows only configured origins and the necessary Authorization, Content-Type and X-Organization-Id headers; browser origins do not authorize data access.
 
 See [authentication.md](authentication.md) for Supabase configuration, token flow and migration commands.
+
+## Phase 3 imports and reservations
+
+All endpoints below require Bearer authentication. All except preview also require X-Organization-Id and current membership.
+
+| Method/path | Input / result |
+| --- | --- |
+| POST /api/v1/imports/preview | Multipart file; encoding, headers, first 10 rows, exact total_rows, warnings. No writes. |
+| POST /api/v1/imports/validate | Multipart file, property_id UUID, channel, column_mapping JSON string; validation summary. No writes. |
+| POST /api/v1/imports | Same multipart fields; import metadata/result, duplicate flag, counts, safe validation errors. |
+| GET /api/v1/imports | Optional property_id/channel, limit 1–100 (default 50), offset >=0; items and total. |
+| GET /api/v1/imports/{import_id} | Organization-scoped batch metadata and validation summary. |
+| GET /api/v1/reservations | Optional property_id/channel/from/to/reservation_status plus limit/offset; items and total. |
+| GET /api/v1/reservations/{reservation_id} | Organization-scoped normalized reservation. |
+
+Channels: GENERIC, AIRBNB, BOOKING, AGODA, DIRECT. These are source labels; only GenericCsvAdapter exists. Statuses: CONFIRMED, CANCELLED, UNKNOWN. Date filters use inclusive check-in dates; from > to returns 422. Lists order imports by newest created_at then id, reservations by latest check_in then id.
+
+Example column_mapping form field (a JSON string, not a separate JSON request body):
+
+~~~json
+{"external_reservation_id":"예약번호","check_in":"체크인","check_out":"체크아웃","gross_revenue":"총매출","channel_fee":"수수료"}
+~~~
+
+Import responses include id, property_id, organization_id, channel, filename/checksum, status, total_rows, imported_rows, rejected_rows, inserted_rows, updated_rows, actor/timestamps, mapping/adapter version, validation_errors, error_message and duplicate. Successful and failed processed batches return 200 with explicit status; callers must inspect status. Duplicate completed files return the previous batch with duplicate=true. Malformed CSV/mapping returns 422, oversized files/requests 413. No partial import is performed.
+
+Validation responses contain total_rows, valid_rows, invalid_rows, errors[{row,field,message}], errors_truncated and warnings. Only the first 100 errors are returned and stored. Errors never echo raw cell values. Unexpected batch-write errors roll back all reservation changes and return safe FAILED metadata when the outer transaction remains usable.
+
+Reservation amounts are exact decimal strings/null, dates are YYYY-MM-DD, timestamps carry UTC offsets, booked_nights is backend-calculated, and source=owner_csv with import_id identifies provenance. net_revenue_method describes gross minus reported fee; missing fee yields null net. No KPIs are returned.
+
+See [imports.md](imports.md) for encoding, limits, full-replacement upsert semantics, retries, source contract and manual testing.

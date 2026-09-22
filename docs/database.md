@@ -1,6 +1,6 @@
 # Stay Insight database design
 
-Status: Phase 2 implements organizations, organization_members and properties under the app schema in local PostgreSQL/PostGIS. All other entities below are future proposals. Metric semantics are defined in [product.md](product.md); access boundaries are defined in [architecture.md](architecture.md).
+Status: Phase 3 adds the import/reservation tables documented below. Phase 2 implements organizations, organization_members and properties under the app schema in local PostgreSQL/PostGIS. All other entities below are future proposals. Metric semantics are defined in [product.md](product.md); access boundaries are defined in [architecture.md](architecture.md).
 
 ## Implemented Phase 2 foundation
 
@@ -17,6 +17,18 @@ Membership reads are limited to the verified user; property reads/writes require
 Onboarding uses a user-keyed transaction advisory lock and a same-name retry policy. Service transactions commit before the API response is returned. Upgrade/downgrade/re-upgrade tests run on isolated PostgreSQL databases. Downgrade is destructive to the three application tables and is not a routine update command. The shared NOLOGIN role is retained on downgrade because other databases may use it.
 
 Alembic autogeneration is restricted to the app schema, protecting PostGIS/system tables. See [authentication.md](authentication.md#start-migrate-and-provision-the-local-role) for exact migration/provisioning commands. Startup never calls create_all or automatically migrates; the existing Docker volume is retained.
+
+## Implemented Phase 3 imports
+
+Additive migration 0002_csv_imports creates app.reservation_imports and app.reservations. It does not modify 0001_foundation, organization/property rows or the Docker volume.
+
+reservation_imports records UUID ownership/property, channel, sanitized original filename, SHA-256, status, total/imported/rejected/inserted/updated counts, actor, timezone-aware timestamps, safe error summary, column mapping and adapter version. A partial unique index on property/channel/checksum where COMPLETED prevents repeated successful files while permitting retries after failure. A composite organization/property/id key supports reservation provenance integrity.
+
+reservations records UUID ownership/property/import, channel/external ID, service dates, backend-computed nights, optional guests, exact NUMERIC(18,0) KRW amounts, normalized status and timezone-aware timestamps. Property/channel/external ID is unique. Composite foreign keys prevent cross-organization property/import references. Checks enforce date ordering, matching nights, positive guests, valid statuses/channels and gross/fee/net relationships. Decimal values serialize as strings; no floating-point money exists.
+
+Indexes lead with organization_id and support property history, reservation check-in pagination and import links. Both tables force RLS with current organization/current membership checks. Explicit predicates also scope repository reads/counts/updates; grants exclude deletes and ownership changes. No raw files or raw source rows are persisted.
+
+See [imports.md](imports.md) for transaction, idempotency and correction semantics. The reservation/import proposals below describe later extensions, not additional implemented fields.
 
 The remaining sections describe the broader target design. Phase 2's implemented names replace the earlier memberships/accommodations proposal; historical inventory, revenue and other entities are not implemented.
 

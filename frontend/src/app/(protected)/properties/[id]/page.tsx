@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireOrganization, serverApi } from "@/lib/api/server";
 import { ApiError } from "@/lib/api/transport";
@@ -18,5 +19,10 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
       <div><dt>시간대</dt><dd>{property.timezone}</dd></div>
       <div><dt>위도 / 경도</dt><dd>{property.latitude ?? "미입력"} / {property.longitude ?? "미입력"}</dd></div>
     </dl>
+    <nav className="mt-6 flex gap-4">
+      <Link className="underline" href={`/properties/${id}/imports/new`}>CSV 가져오기</Link>
+      <Link className="underline" href={`/properties/${id}/imports`}>가져오기 기록</Link>
+      <Link className="underline" href={`/properties/${id}/reservations`}>예약 목록</Link>
+    </nav>
   </section>;
 }
