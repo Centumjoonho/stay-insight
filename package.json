@@ -1,0 +1,11 @@
+{
+  "name": "stay-insight",
+  "private": true,
+  "packageManager": "pnpm@11.19.0",
+  "scripts": {
+    "lint": "pnpm --dir frontend lint && uv run --project backend ruff check backend",
+    "typecheck": "pnpm --dir frontend typecheck && uv run --project backend mypy --config-file backend/pyproject.toml backend/app backend/tests",
+    "test": "pnpm --dir frontend test && uv run --project backend pytest -c backend/pyproject.toml backend/tests",
+    "build": "pnpm --dir frontend build"
+  }
+}

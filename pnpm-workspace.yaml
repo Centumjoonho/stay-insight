@@ -1,0 +1,5 @@
+packages:
+  - frontend
+saveExact: true
+allowBuilds:
+  unrs-resolver: false

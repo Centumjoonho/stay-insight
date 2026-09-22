@@ -1,0 +1,68 @@
+services:
+  db:
+    image: postgis/postgis:17-3.5
+    environment:
+      # LOCAL DEVELOPMENT DEFAULTS ONLY.
+      POSTGRES_DB: stay_insight
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d stay_insight && psql -U postgres -d stay_insight -tAc 'SELECT PostGIS_Version()' >/dev/null"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+  backend:
+    build: ./backend
+    environment:
+      APP_ENV: development
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://stay_insight_app:stay_insight_local@db:5432/stay_insight}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+      SUPABASE_URL: ${SUPABASE_URL:-}
+      SUPABASE_JWT_AUDIENCE: authenticated
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./backend/app:/app/app
+      - ./backend/alembic:/app/alembic
+      - ./backend/tests:/app/tests
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "uv", "run", "--no-sync", "python", "-c", "import json,urllib.request; assert json.load(urllib.request.urlopen('http://localhost:8000/api/v1/health', timeout=3)) == {'status':'ok'}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+      NEXT_PUBLIC_SUPABASE_URL: ${SUPABASE_URL:-}
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${SUPABASE_PUBLISHABLE_KEY:-}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY:-}
+      # Container-side tooling only; never used as the browser API URL.
+      API_INTERNAL_BASE_URL: http://backend:8000
+      WATCHPACK_POLLING: "true"
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - ./frontend/src:/workspace/frontend/src
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "Promise.all([fetch('http://localhost:3000'),fetch(process.env.API_INTERNAL_BASE_URL+'/api/v1/health')]).then(async ([web,api])=>{if(!web.ok||!api.ok||(await api.json()).status!=='ok')process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+volumes:
+  postgres_data:
