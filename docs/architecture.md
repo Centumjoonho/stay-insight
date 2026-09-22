@@ -99,3 +99,5 @@ Checked on 2026-09-22. These references support integration boundaries, not a cl
 - [Supabase JWT documentation](https://supabase.com/docs/guides/auth/jwts): verify tokens using the configured project signing mechanism.
 
 The Supabase Markdown changelog could not be fetched by the documentation browser in this task. Recheck relevant current platform changes when scaffolding; no version-specific implementation is committed here.
+
+- ADR-019: NEXT_PUBLIC_SITE_URL is the explicit public origin for Auth email/callback and Proxy redirects. Never derive browser redirect origins from request.url or the Docker bind hostname. Production supplies its own build-time origin.

@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { browserAuth } from "@/lib/supabase/client";
 import { authConfiguration } from "@/lib/supabase/config";
+import { signupRedirectOptions } from "@/lib/supabase/redirects";
 import { businessApi } from "@/lib/api/client";
 
 export function AuthForm({ mode }: { mode: "login" | "signup" }) {
@@ -24,7 +25,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       const result = mode === "login"
         ? await auth.auth.signInWithPassword(credentials)
         : await auth.auth.signUp({
-          ...credentials, options: { emailRedirectTo: window.location.origin + "/auth/callback" },
+          ...credentials, options: signupRedirectOptions(),
         });
       if (result.error) {
         setMessage(mode === "login" ? "이메일과 비밀번호를 확인해 주세요." : "가입 정보를 확인하거나 잠시 후 다시 시도해 주세요.");

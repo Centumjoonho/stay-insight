@@ -43,6 +43,7 @@ Copy-Item backend/.env.example backend/.env
 For Compose, edit root `.env`:
 
 ```dotenv
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 SUPABASE_URL=<your project HTTPS URL>
 SUPABASE_PUBLISHABLE_KEY=<your public publishable key>
 ```
@@ -50,6 +51,7 @@ SUPABASE_PUBLISHABLE_KEY=<your public publishable key>
 For host Next.js development, edit `frontend/.env.local`:
 
 ```dotenv
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
 NEXT_PUBLIC_SUPABASE_URL=<same project HTTPS URL>
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<same public publishable key>
@@ -111,3 +113,13 @@ For host tests, set TEST_DATABASE_URL to the same local administrator with host 
 - [Next.js authentication and authorization guidance](https://nextjs.org/docs/app/guides/authentication).
 
 Relevant documentation was checked during implementation. The Markdown changelog endpoint did not render in the documentation browser; no claim of a completed changelog audit is made.
+
+## Public redirect origin
+
+NEXT_PUBLIC_SITE_URL is the single public application origin for signup emailRedirectTo, callback success/failure redirects and Proxy login redirects. Locally set it to http://localhost:3000 in root .env (Compose) and frontend/.env.local (host development). Set the deployment origin in production. Origins with credentials, paths, queries/fragments or unspecified bind hosts are rejected; there is no request-origin fallback.
+
+The callback previously resolved redirects against request.url, which Next.js constructed with its Docker bind host, producing http://0.0.0.0:3000/login. The bind address remains in dev/start commands only; redirect construction now uses the validated public origin. Keep Supabase Site URL and allowed callback URL aligned with this setting.
+
+After changing the Compose environment, run docker compose up -d --force-recreate frontend. The development container runs next dev with mounted source, so an image rebuild is not required for the runtime fix. To include updated examples/tests in the image, use docker compose up --build -d frontend. A plain docker compose restart does not load changed Compose environment. Production next build must receive NEXT_PUBLIC_SITE_URL at build time; rebuild/redeploy after changing it because Next.js inlines public environment variables.
+
+Regression tests cover signup URLs, actual callback route success/failure/missing-code branches, Proxy redirects and rejected bind-host configuration without contacting Supabase. A local HTTP request reproduced the original invalid Location header.

@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { authConfiguration } from "@/lib/supabase/config";
+import { publicAuthUrl } from "@/lib/supabase/redirects";
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -9,7 +10,7 @@ export async function proxy(request: NextRequest) {
     request.nextUrl.pathname === "/onboarding";
   const config = authConfiguration();
   const redirectToLogin = () => {
-    const redirect = NextResponse.redirect(new URL("/login", request.url));
+    const redirect = NextResponse.redirect(publicAuthUrl("/login"));
     response.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
     redirect.headers.set("Cache-Control", "private, no-store");
     return redirect;

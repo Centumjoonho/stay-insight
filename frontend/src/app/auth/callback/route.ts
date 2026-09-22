@@ -1,16 +1,16 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { serverAuth } from "@/lib/supabase/server";
+import { publicAuthUrl } from "@/lib/supabase/redirects";
 
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get("code");
   const auth = await serverAuth();
+  let destination: "/login" | "/onboarding" = "/login";
   if (code && auth) {
     const { error } = await auth.auth.exchangeCodeForSession(code);
-    if (!error) {
-      const response = NextResponse.redirect(new URL("/onboarding", request.url));
-      response.headers.set("Cache-Control", "private, no-store");
-      return response;
-    }
+    if (!error) destination = "/onboarding";
   }
-  return NextResponse.redirect(new URL("/login", request.url));
+  const response = NextResponse.redirect(publicAuthUrl(destination));
+  response.headers.set("Cache-Control", "private, no-store");
+  return response;
 }
