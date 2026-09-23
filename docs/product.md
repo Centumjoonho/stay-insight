@@ -32,7 +32,7 @@ Required reservation data: stable source reservation ID, source system/channel, 
 
 An import previews additions, exact duplicates, corrections, and errors. Exact duplicates are no-ops. Changed source records require explicit correction confirmation and replace prior active facts in one transaction. Any blocking row error prevents the whole commit. A preview is revalidated at commit so concurrent changes cannot silently overwrite it.
 
-## Metric contract, version 1
+## Proposed service-night metric contract, version 1 (future)
 
 These are management reporting metrics, not statutory accounting or tax statements. Each rentable room or whole-home listing is one sellable unit; guests and beds are not units unless the property's declared inventory model explicitly sells beds. Only comparable inventory models can share a benchmark cohort.
 
@@ -97,3 +97,18 @@ contract above and must not be treated as profitability.
 
 Operating profit is NOT implemented in Phase 4. Phase 5 must explicitly design reconciliation
 between reservation fees, revenue recognition and completed-stay metrics before financial KPIs ship.
+
+## Implemented Phase 5 dashboard-v1
+
+The current dashboard implements the separately versioned [metrics.md](metrics.md) contract.
+Its primary revenue uses eligible check-in dates; operational ADR/RevPAR use proportional overlapping
+night allocation. CONFIRMED and UNKNOWN count, CANCELLED does not. These reservation proxies use one
+room per reservation and current registered inventory; occupancy/ADR/RevPAR are explicitly estimated.
+They do not claim actual completed-stay or sellable-inventory measurement. The earlier service-night,
+dated-inventory, refund and verified-completion definitions remain future proposals, not this release.
+
+Known operating profit is recorded gross minus manual expenses and known reservation fees once.
+Missing fees and expenses are disclosed; profit is not net/accounting profit. Current months stop
+today in Seoul and compare equivalent prior-month/year days. No-data states must not fabricate zero
+business activity. Phase 4 all-status cost summaries remain unchanged, with cancellation/date-range
+differences explained in the dashboard. No Phase 6/public/benchmark features are implemented.

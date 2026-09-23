@@ -109,3 +109,29 @@ Summary uses expense_date for manual rows and check_in for non-null reservation 
 all reservation statuses. It includes reservations_with_fee/reservations_missing_fee and source metadata.
 known_cost_total is manual_expense_total + channel_fee_total. No synthetic fee expenses or profit calculation.
 Category/type list filters do not narrow the period-wide summary.
+
+## Phase 5 dashboard (read-only)
+
+| Endpoint | Query |
+| --- | --- |
+| GET /api/v1/dashboard/summary | Required property_id UUID, optional month YYYY-MM (Seoul current month default) |
+| GET /api/v1/dashboard/trends | Required property_id UUID, optional months integer 1–24 default 12, optional ending month YYYY-MM |
+
+Verified JWT, current organization membership and scoped property lookup are mandatory. Foreign
+properties return 404, nonmembership/revocation 403, missing/invalid JWT 401, malformed/future months
+or out-of-range months 422. Responses use no-store and existing error handling.
+
+Summary returns property, period (inclusive dates, is_current_month, is_partial), financial,
+operations, data_quality, channels, category_breakdown, metadata and comparisons.previous_month /
+previous_year. Each comparison has the actual comparison period and a metrics map containing
+available, absolute_delta, percentage_change and percentage_points. Decimal quantities are strings;
+undefined ratios/changes are null. Occupancy is a percentage value, not a 0–1 fraction.
+
+Trends returns property, metadata and chronological items for every month, including zero-data
+months. Each row includes month/end_date/is_partial, revenue, manual expenses, known fees/cost/profit,
+occupancy/ADR/RevPAR/count, financial/operational presence flags and expense_count. These flags
+distinguish aggregate zero from evidence of no business activity. No channels endpoint is needed.
+
+See [metrics.md](metrics.md) for formulas, status policy, rounding, source and missing-data semantics,
+and [dashboard.md](dashboard.md) for authenticated diagnostics and manual reconciliation.
+Phase 4 expense summary retains all-status semantics; Phase 5 excludes CANCELLED.

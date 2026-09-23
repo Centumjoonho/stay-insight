@@ -133,3 +133,18 @@ This supersedes the future expense void/history proposal only for the implemente
 Reservations remain the sole storage for reported channel_fee. Summary reads them by check_in
 without inserting expense rows. Unknown fees stay null and coverage counts expose missing values.
 See [expenses.md](expenses.md) for definitions, validation, categories and migration safety.
+
+## Implemented Phase 5 read model
+
+Dashboard queries derive metrics from app.reservations, app.expenses and current
+app.properties.inventory_units without writes, materialization or schema changes.
+Migrations 0001–0003 are unchanged; no 0004 is required for this phase. Existing reservation
+organization/property/check-in indexes narrow financial/overlap candidates; expense organization/
+property/date index supports expense aggregates. Overlap additionally filters check_out and status.
+Measure real-volume plans before introducing specialized overlap indexes.
+
+All aggregate joins scope organization_id and property_id explicitly. Existing restricted runtime
+role and transaction-local forced RLS still apply; no alembic_version privileges are added.
+Reservation gross and fees retain NUMERIC storage. Analytical allocation uses PostgreSQL numeric
+arithmetic, never float, and does not rewrite reservation rows or manufacture expense entries.
+See [metrics.md](metrics.md) for dashboard-v1 and [dashboard.md](dashboard.md) for usage.

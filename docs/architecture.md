@@ -133,3 +133,23 @@ See [imports.md](imports.md) for implemented behavior and boundaries. Dependenci
   formatting uses exact strings/BigInt. Production build and Webpack development remain unchanged.
 
 Operating profit is NOT implemented in Phase 4. See [expenses.md](expenses.md).
+
+## Implemented Phase 5 dashboard
+
+- ADR-031: dashboard-v1 is an explicitly versioned management contract, using check-in financial
+  recognition and overlapping-night operational allocation. It supersedes the earlier proposed
+  completed-stay metric contract for this dashboard only. UNKNOWN is included, CANCELLED excluded.
+  Retain Phase 4 all-status fees; disclose reconciliation differences rather than silently change
+  a working feature. See [metrics.md](metrics.md).
+- ADR-032: Dashboard routes are read-only HTTP adapters. Services own periods, Decimal formulas,
+  comparisons and quality rules. The dashboard repository uses three parameterized PostgreSQL
+  aggregate queries for all requested periods, with explicit organization/property predicates plus
+  existing forced RLS. Summary batches three periods; trends batches up to 24, never per-month queries.
+  Existing organization/property/check-in and expense-date indexes support this MVP; no migration,
+  caching tables or extra runtime privileges. Revisit overlap plans with measured production volume.
+- ADR-033: Initial dashboard data is fetched by the authenticated Next.js server API client.
+  Recharts 3.10.1 is the sole new direct dependency, for two client-side charts. Exact decimal strings
+  remain authoritative; BigInt formatting and a readable trend table avoid monetary precision loss.
+  Charts omit missing observations and unsafe numeric coordinates. Calendar occupancy and
+  proportional ADR/RevPAR are visibly estimated; comparisons are neutral and use percentage points.
+  Preserve Webpack dev, production build, JWT verification and all Phase 1–4 domain behavior.

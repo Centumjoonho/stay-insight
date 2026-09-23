@@ -1,3 +1,4 @@
+import type { DashboardSummary, DashboardTrends } from "./dashboard-types";
 import type { Expense, ExpenseSummary } from "./expense-types";
 import type { ImportResult, Page, Reservation } from "./import-types";
 import { redirect } from "next/navigation";
@@ -30,6 +31,10 @@ async function request<T>(path: string, organizationId?: string): Promise<T> {
 }
 
 export const serverApi = {
+  dashboardSummary: (org: string, property: string, month?: string) =>
+    request<DashboardSummary>("/api/v1/dashboard/summary?" + new URLSearchParams({ property_id: property, ...(month ? { month } : {}) }), org),
+  dashboardTrends: (org: string, property: string, month?: string) =>
+    request<DashboardTrends>("/api/v1/dashboard/trends?" + new URLSearchParams({ property_id: property, months: "12", ...(month ? { month } : {}) }), org),
   expenses: (org: string, query: string) => request<Page<Expense>>("/api/v1/expenses?" + query, org),
   expenseSummary: (org: string, query: string) => request<ExpenseSummary>("/api/v1/expenses/summary?" + query, org),
   expense: (org: string, id: string) => request<Expense>("/api/v1/expenses/" + encodeURIComponent(id), org),
