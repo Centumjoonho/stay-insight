@@ -4,6 +4,7 @@ from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.upload_limit import ImportBodyLimit
+from app.api.v1.expenses import router as expenses_router
 from app.api.v1.foundation import router as foundation_router
 from app.api.v1.health import router as health_router
 from app.api.v1.imports import router as imports_router
@@ -25,7 +26,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         CORSMiddleware,
         allow_origins=config.cors_origins,
         allow_credentials=False,
-        allow_methods=["GET", "POST", "PATCH"],
+        allow_methods=["GET", "POST", "PATCH", "DELETE"],
         allow_headers=["Content-Type", "Authorization", "X-Organization-Id"],
     )
 
@@ -42,6 +43,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.include_router(health_router, prefix="/api/v1")
     application.include_router(foundation_router, prefix="/api/v1")
     application.include_router(imports_router, prefix="/api/v1")
+    application.include_router(expenses_router, prefix="/api/v1")
     return application
 
 

@@ -84,3 +84,28 @@ Validation responses contain total_rows, valid_rows, invalid_rows, errors[{row,f
 Reservation amounts are exact decimal strings/null, dates are YYYY-MM-DD, timestamps carry UTC offsets, booked_nights is backend-calculated, and source=owner_csv with import_id identifies provenance. net_revenue_method describes gross minus reported fee; missing fee yields null net. No KPIs are returned.
 
 See [imports.md](imports.md) for encoding, limits, full-replacement upsert semantics, retries, source contract and manual testing.
+
+## Phase 4 expenses
+
+All expense endpoints require Bearer + X-Organization-Id and current membership.
+See [expenses.md](expenses.md) for exact validation, source/coverage metadata and manual testing.
+
+| Method/path | Contract |
+| --- | --- |
+| POST /api/v1/expenses | property_id, expense_date, category, explicit cost_type, exact amount, optional memo; 201 |
+| GET /api/v1/expenses | Required property_id; optional inclusive from/to, category, cost_type, limit 1–100, offset >=0; items/total |
+| GET /api/v1/expenses/summary | Required property_id/from/to; manual/fixed/variable/fee/known totals and breakdowns |
+| GET /api/v1/expenses/{expense_id} | Authorized manual expense; 200 |
+| PATCH /api/v1/expenses/{expense_id} | Nonempty subset of expense_date/category/cost_type/amount/memo; 200 |
+| DELETE /api/v1/expenses/{expense_id} | Authorized physical manual-expense deletion; 204 without body |
+
+Static summary route precedes UUID routes. Unknown request fields are rejected. Only memo is nullable
+on PATCH; ownership/source/creator/property are immutable. Decimal amounts serialize as strings.
+Lists sort newest expense date, then creation timestamp and ID descending.
+404 conceals foreign IDs, 403 rejects nonmembers, 401 rejects missing/invalid auth, 422 rejects
+invalid fields/ranges. OWNER and MEMBER can manage expenses; no runtime migration grants are added.
+
+Summary uses expense_date for manual rows and check_in for non-null reservation fees, inclusive bounds,
+all reservation statuses. It includes reservations_with_fee/reservations_missing_fee and source metadata.
+known_cost_total is manual_expense_total + channel_fee_total. No synthetic fee expenses or profit calculation.
+Category/type list filters do not narrow the period-wide summary.

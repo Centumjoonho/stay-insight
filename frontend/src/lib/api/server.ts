@@ -1,3 +1,4 @@
+import type { Expense, ExpenseSummary } from "./expense-types";
 import type { ImportResult, Page, Reservation } from "./import-types";
 import { redirect } from "next/navigation";
 import { serverAuth } from "@/lib/supabase/server";
@@ -29,6 +30,9 @@ async function request<T>(path: string, organizationId?: string): Promise<T> {
 }
 
 export const serverApi = {
+  expenses: (org: string, query: string) => request<Page<Expense>>("/api/v1/expenses?" + query, org),
+  expenseSummary: (org: string, query: string) => request<ExpenseSummary>("/api/v1/expenses/summary?" + query, org),
+  expense: (org: string, id: string) => request<Expense>("/api/v1/expenses/" + encodeURIComponent(id), org),
   imports: (org: string, query: string) => request<Page<ImportResult>>("/api/v1/imports?" + query, org),
   reservations: (org: string, query: string) => request<Page<Reservation>>("/api/v1/reservations?" + query, org),
   me: () => request<MeResponse>("/api/v1/me"),

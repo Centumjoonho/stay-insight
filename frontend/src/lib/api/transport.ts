@@ -36,7 +36,7 @@ export async function apiRequest<T>(
     const messages: Record<number, string> = {
       401: "로그인이 만료되었습니다. 다시 로그인해 주세요.",
       403: "이 사업장에 접근할 권한이 없습니다.",
-      404: "숙소를 찾을 수 없습니다.",
+      404: path.startsWith("/api/v1/expenses") ? "비용을 찾을 수 없습니다." : "숙소를 찾을 수 없습니다.",
       409: "이미 사업장 등록을 완료했습니다. 내 숙소로 이동해 주세요.",
       413: "파일이 너무 큽니다. CSV는 5 MiB / 10,000행 이하여야 합니다.",
       422: path.startsWith("/api/v1/imports")
@@ -45,5 +45,6 @@ export async function apiRequest<T>(
     };
     throw new ApiError(response.status, messages[response.status] ?? "요청을 처리할 수 없습니다.");
   }
+  if (response.status === 204) return undefined as T;
   return response.json() as Promise<T>;
 }

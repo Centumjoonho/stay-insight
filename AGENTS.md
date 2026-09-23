@@ -4,7 +4,7 @@
 
 Stay Insight is a Korean SaaS for accommodation owners, initially in Busan. Read [product](docs/product.md), [architecture](docs/architecture.md), [database](docs/database.md), and [repository structure](docs/repository-structure.md) before changing the application.
 
-Phase 2 adds Supabase Auth, organization onboarding, memberships and properties on the existing local PostGIS database. Read docs/authentication.md and docs/api.md for the implemented contract. Phase 3 adds generic CSV imports and reservation reads; read docs/imports.md for that contract. Other business domains remain proposals. Implement only the feature explicitly assigned.
+Phase 2 adds Supabase Auth, organization onboarding, memberships and properties on the existing local PostGIS database. Read docs/authentication.md and docs/api.md for the implemented contract. Phase 3 adds generic CSV imports and reservation reads; read docs/imports.md for that contract. Phase 4 adds manual operating expenses and a source-separated known-cost summary; read docs/expenses.md. Other business domains remain proposals. Implement only the feature explicitly assigned.
 
 MVP: authentication, accommodation registration, CSV reservation/revenue import, expenses, operating dashboard, revenue, ADR, occupancy, RevPAR, operating profit, channel breakdown, monthly comparisons, public Busan accommodation information, tourism visitor trends, local events, and conditional anonymous benchmarks.
 

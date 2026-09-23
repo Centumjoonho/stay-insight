@@ -115,3 +115,21 @@ Reservation corrections replace active nightly facts and retain prior values/rev
 Archive accommodations instead of cascading deletion into historical results. Use restrictive foreign-key deletion behavior for financial records. Organization erasure is an explicit controlled workflow covering facts, uploads, consent, audit retention policy, and affected benchmark releases; its retention/legal requirements must be settled before launch. Do not assume deleting an Auth user deletes their organization.
 
 Alembic owns application tables, indexes, extensions required by the application, policies, and grants. Keep provider-managed schemas untouched except documented supported integration references. Test migration upgrades on an empty database and the previous revision, runtime grants/RLS, constraints and representative calculations. Before production, verify backup/restore, upload cleanup and deletion procedures. Phase 2 migration scope is the three foundation tables documented above.
+
+
+## Implemented Phase 4 expenses
+
+Migration 0003_expenses adds app.expenses with UUID id, organization/property ownership,
+DATE expense_date, category, explicit FIXED/VARIABLE cost_type, NUMERIC(18,0) nonnegative amount,
+nullable VARCHAR(1000) memo, MANUAL source, creator UUID, and timezone-aware audit timestamps.
+
+A composite organization/property foreign key enforces tenant-safe property references.
+The organization/property/expense_date/id index supports date-scoped lists and summaries.
+Forced RLS checks organization and current membership; runtime grants are SELECT/INSERT/DELETE
+plus UPDATE on editable fields and updated_at only. Existing table privileges and migrations are unchanged.
+Physical expense deletion is explicitly allowed in this phase; no history/soft-delete claim is made.
+This supersedes the future expense void/history proposal only for the implemented Phase 4 contract.
+
+Reservations remain the sole storage for reported channel_fee. Summary reads them by check_in
+without inserting expense rows. Unknown fees stay null and coverage counts expose missing values.
+See [expenses.md](expenses.md) for definitions, validation, categories and migration safety.

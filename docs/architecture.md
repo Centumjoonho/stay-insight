@@ -114,3 +114,22 @@ The Supabase Markdown changelog could not be fetched by the documentation browse
 See [imports.md](imports.md) for implemented behavior and boundaries. Dependencies added: python-multipart for FastAPI uploads; jsdom and its TypeScript types for interactive React tests only. No storage SDK, queue, provider-specific importer or additional service is introduced.
 
 - ADR-026: Use Webpack explicitly for Next.js development to work around reported intermittent Turbopack nested-route 404s. Preserve the Docker bind hostname and the unchanged production build command. Rebuild/recreate the frontend image after changing the dev script because package.json is copied into the image. Reconsider this workaround after an upstream fix is verified; the intermittent failure was not reproducible during this change.
+
+
+## Phase 4 decisions
+
+- ADR-027: Manual operating expenses use their own model/schema/repository/service/routes, with
+  Decimal/NUMERIC(18,0), explicit fixed/variable selection, immutable ownership and MANUAL source.
+  Reuse existing transaction-local membership authorization and forced RLS; migration permissions
+  remain separate from the runtime login.
+- ADR-028: Keep reported reservation channel fees in reservations. The known-cost summary combines
+  independently attributed manual expenses and non-null channel fees exactly once; it includes
+  source and missing-fee counts. Check-in DATE attribution matches Phase 3, uses inclusive bounds
+  and all recorded statuses, and is not a profitability/service-night metric.
+- ADR-029: Phase 4 permits explicit-confirmation physical manual-expense deletion per the assigned
+  scope. Creator/timestamps remain for extant rows; version history, voiding and recovery are deferred.
+- ADR-030: Summary cards describe the full selected period, while category/type filters affect the
+  paginated manual list. Label this distinction. Default dates use Asia/Seoul; browser money
+  formatting uses exact strings/BigInt. Production build and Webpack development remain unchanged.
+
+Operating profit is NOT implemented in Phase 4. See [expenses.md](expenses.md).

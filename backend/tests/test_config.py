@@ -27,5 +27,6 @@ def test_database_configuration_without_connection() -> None:
         "app.properties",
         "app.reservation_imports",
         "app.reservations",
+        "app.expenses",
     }
     engine.dispose()

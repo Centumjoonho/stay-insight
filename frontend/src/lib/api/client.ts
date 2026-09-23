@@ -1,3 +1,4 @@
+import type { Expense, ExpenseValues } from "./expense-types";
 import type { Channel, ColumnMapping, CsvPreview, ImportResult, ValidationResult } from "./import-types";
 import { importForm } from "@/lib/imports";
 import { browserAuth } from "@/lib/supabase/client";
@@ -21,6 +22,12 @@ async function request<T>(path: string, options?: RequestInit, organizationId?: 
 }
 
 export const businessApi = {
+  createExpense: (org: string, body: ExpenseValues & { property_id: string }) =>
+    request<Expense>("/api/v1/expenses", { method: "POST", body: JSON.stringify(body) }, org),
+  updateExpense: (org: string, id: string, body: ExpenseValues) =>
+    request<Expense>("/api/v1/expenses/" + encodeURIComponent(id), { method: "PATCH", body: JSON.stringify(body) }, org),
+  deleteExpense: (org: string, id: string) =>
+    request<void>("/api/v1/expenses/" + encodeURIComponent(id), { method: "DELETE" }, org),
   previewCsv: (file: File) => {
     const body = new FormData(); body.set("file", file);
     return request<CsvPreview>("/api/v1/imports/preview", { method: "POST", body });

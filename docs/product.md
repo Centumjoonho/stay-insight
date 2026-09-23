@@ -82,3 +82,18 @@ Consent withdrawal excludes future computation and invalidates affected served r
 5. Integrate verified public sources and Kakao Maps; then enable benchmarks only when their release gates are met.
 
 Each feature needs lint, type-check, and relevant tests before completion. No credentials or deployments are required for this documentation task.
+
+
+## Implemented Phase 4 cost foundation
+
+[expenses.md](expenses.md) defines the implemented operating-expense contract. It supersedes the
+earlier proposal to enter OTA commissions manually: reservation channel_fee is the sole reported
+platform-fee source in Phase 4. Do not duplicate it in manual operating costs.
+Manual expenses require explicit FIXED/VARIABLE and accept whole nonnegative KRW including zero.
+Physical deletion with explicit UI confirmation is allowed; historical void/audit revisions remain
+a future proposal. The period summary attributes fees to check-in date, all recorded statuses,
+and discloses missing fees. This known-cost view is separate from the future service-night metric
+contract above and must not be treated as profitability.
+
+Operating profit is NOT implemented in Phase 4. Phase 5 must explicitly design reconciliation
+between reservation fees, revenue recognition and completed-stay metrics before financial KPIs ship.
