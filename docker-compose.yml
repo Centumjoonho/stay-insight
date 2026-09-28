@@ -19,13 +19,14 @@ services:
   backend:
     build: ./backend
     environment:
+      PUBLIC_ACCOMMODATION_API_KEY: ${PUBLIC_ACCOMMODATION_API_KEY:-}
       APP_ENV: development
       DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://stay_insight_app:stay_insight_local@db:5432/stay_insight}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
       SUPABASE_URL: ${SUPABASE_URL:-}
       SUPABASE_JWT_AUDIENCE: authenticated
     ports:
-      - "127.0.0.1:8000:8000"
+      - "127.0.0.1:${API_PORT:-18000}:8000"
     volumes:
       - ./backend/app:/app/app
       - ./backend/alembic:/app/alembic
@@ -45,17 +46,16 @@ services:
       dockerfile: frontend/Dockerfile
     environment:
       NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
-      NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:${API_PORT:-18000}
       NEXT_PUBLIC_SUPABASE_URL: ${SUPABASE_URL:-}
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${SUPABASE_PUBLISHABLE_KEY:-}
       NEXT_PUBLIC_SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY:-}
       # Container-side tooling only; never used as the browser API URL.
       API_INTERNAL_BASE_URL: http://backend:8000
-      WATCHPACK_POLLING: "true"
+      WATCHPACK_POLLING: "false"
     ports:
       - "127.0.0.1:3000:3000"
-    volumes:
-      - ./frontend/src:/workspace/frontend/src
+    # Use image source; rebuild frontend after edits (Windows route discovery).
     depends_on:
       backend:
         condition: service_healthy

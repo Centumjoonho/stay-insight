@@ -19,7 +19,8 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
       <div><dt>시간대</dt><dd>{property.timezone}</dd></div>
       <div><dt>위도 / 경도</dt><dd>{property.latitude ?? "미입력"} / {property.longitude ?? "미입력"}</dd></div>
     </dl>
-    <nav className="mt-6 flex gap-4">
+    <nav className="mt-6 flex flex-wrap gap-4">
+      <Link className="underline" href={`/properties/${id}/market`}>지역 시장</Link>
       <Link className="underline" href={`/properties/${id}/dashboard`}>대시보드</Link>
       <Link className="underline" href={`/properties/${id}/expenses`}>비용 관리</Link>
       <Link className="underline" href={`/properties/${id}/imports/new`}>CSV 가져오기</Link>

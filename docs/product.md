@@ -112,3 +112,10 @@ Missing fees and expenses are disclosed; profit is not net/accounting profit. Cu
 today in Seoul and compare equivalent prior-month/year days. No-data states must not fabricate zero
 business activity. Phase 4 all-status cost summaries remain unchanged, with cancellation/date-range
 differences explained in the dashboard. No Phase 6/public/benchmark features are implemented.
+
+## Phase 6 public accommodation foundation
+
+The property-local market page and authenticated local-DB aggregate contract are implemented.
+Official MOIS lodging REST API ingestion is implemented; successful complete collection gates metrics.
+See [public market](public-accommodation-market.md) and [source decision](public-accommodation-source.md).
+Live counts require successful ingestion and confirmed property district. Visitor/event/map/benchmark features are excluded. dashboard-v1 is unchanged.

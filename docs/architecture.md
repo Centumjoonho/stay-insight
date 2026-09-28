@@ -153,3 +153,43 @@ Operating profit is NOT implemented in Phase 4. See [expenses.md](expenses.md).
   Charts omit missing observations and unsafe numeric coordinates. Calendar occupancy and
   proportional ADR/RevPAR are visibly estimated; comparisons are neutral and use percentage points.
   Preserve Webpack dev, production build, JWT verification and all Phase 1–4 domain behavior.
+
+## Development route discovery recovery
+
+- ADR-034: Keep Webpack dev and the existing route tree. On Windows Docker, the
+  source bind mount with Watchpack polling produced missing nested AppRoutes and
+  malformed generated dev TypeScript files, while the source pages existed and
+  an isolated production build included the routes. Removing that mount and
+  disabling polling restored complete route discovery. This identifies a failing
+  development file-watching configuration, not a proven Turbopack-only defect or
+  a confirmed upstream race. Use image-copied frontend source; rebuild frontend
+  after edits. Do not share production build output with the running dev server.
+  No application/authentication/backend logic changes are required.
+- ADR-035: Publish the local API at configurable API_PORT (default 18000), with
+  the browser API URL derived from that same value. Windows reserves port 8000
+  on the current machine. Internal API traffic continues to use backend:8000;
+  the public application origin remains http://localhost:3000.
+## Phase 6 decisions
+
+- ADR-036: The official MOIS lodging catalogue is identified, but its linked file server returned
+  403. Ship the internal provider boundary and honest unavailable UI without inventing a live API,
+  field mappings, credentials or upstream fixtures. Document LIVE PROVIDER NOT VERIFIED.
+- ADR-037: Add only Busan district reference rows and explicit administrator association to a property.
+  Compare saved address fields to current fields on reads; changed addresses invalidate association.
+  No free-text geocoding, dong inference, map or unverified geographic codes.
+- ADR-038: Public records are shared context in app schema with read-only runtime grants and a
+  command-only ingestion role. Preserve all owner RLS. Atomic sync publication, advisory locking,
+  unique source IDs, no missing-record deletion, failure audit, last successful regional coverage.
+  Test-only DTO providers never seed the application database. No scheduler or network provider yet.
+- ADR-039: license-market-v1 counts latest stored OPEN registrations and date-window licenses/explicit
+  closures, distinct from dashboard-v1. Date window is (one calendar year ago, reference], Feb 29
+  clamped. Missing source dates mean unavailable counts. Seven-day stale warning; no invented
+  reference date or historical status reconstruction. Dedicated market page is primary UI.
+
+- ADR-040: Supersedes ADR-036's live blocker and ADR-038's no-network-provider status.
+  Use the approved MOIS /lodgings/info REST API from the command-only provider. No new dependency,
+  route, migration or worker. Backend-only key, one-time URL encoding, no redirects, bounded reads,
+  retries and nationwide pagination checks precede atomic publication of Busan records. Unknown
+  statuses/categories remain explicit. A source reference date is not inferred from the advertised
+  two-day delay. Offset pagination is not a guaranteed same-instant snapshot. See
+  [source mappings](public-accommodation-source.md) and [verification](public-api-verification.md).

@@ -1,0 +1,9 @@
+{
+  "notice": "DEVELOPMENT / TEST ONLY. Internal DTO fixtures, NOT verified upstream JSON or real businesses.",
+  "records": [
+    {"source_record_id":"TEST-OPEN","business_name":"TEST ONLY 숙소","source_license_type":"TEST 일반","normalized_license_type":"GENERAL_ACCOMMODATION","source_business_status":"TEST 영업","normalized_business_status":"OPEN","sigungu_name":"수영구","license_date":"2026-09-01"},
+    {"source_record_id":"TEST-CLOSED","business_name":"TEST ONLY 폐업","source_license_type":"TEST 관광","normalized_license_type":"TOURIST_HOTEL","source_business_status":"TEST 폐업","normalized_business_status":"CLOSED","sigungu_name":"수영구","license_date":"2020-01-01","closure_date":"2026-09-28"},
+    {"source_record_id":"TEST-UNKNOWN","business_name":"TEST ONLY 미확인","source_license_type":"미검증","source_business_status":"미검증","sigungu_name":"수영구","license_date":"2025-09-28"},
+    {"source_record_id":"TEST-SUSPENDED","business_name":"TEST ONLY 휴업","source_license_type":"TEST 생활","normalized_license_type":"LIFESTYLE_ACCOMMODATION","source_business_status":"TEST 휴업","normalized_business_status":"SUSPENDED","sigungu_name":"수영구","license_date":"2025-09-29"}
+  ]
+}

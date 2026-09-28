@@ -43,7 +43,7 @@ Copy-Item backend/.env.example backend/.env
 
 Use `cp` on macOS/Linux. These local files are ignored; examples contain development defaults only.
 
-Frontend: `NEXT_PUBLIC_API_BASE_URL=http://localhost:8000`. The browser calls `${NEXT_PUBLIC_API_BASE_URL}/api/v1/health`; no backend URL fallback is embedded in source. Missing configuration displays `backend unavailable`. Restart/rebuild after changing public variables because they are included in frontend builds.
+Host frontend: `NEXT_PUBLIC_API_BASE_URL=http://localhost:8000` (Compose supplies port 18000 instead). The browser calls `${NEXT_PUBLIC_API_BASE_URL}/api/v1/health`; no backend URL fallback is embedded in source. Missing configuration displays `backend unavailable`. Restart/rebuild after changing public variables because they are included in frontend builds.
 
 Backend:
 
@@ -59,23 +59,23 @@ CORS_ORIGINS=http://localhost:3000
 
 ```sh
 docker compose config
-docker compose up --build
+docker compose up -d --build
 ```
 
-Compose supplies local defaults and reads blank/public Supabase settings from root `.env` (copy root `.env.example`). Login needs the settings in [authentication.md](docs/authentication.md). Edit Compose values when customizing its environment. Source directories are bind-mounted for reload; rebuild after dependency or unmounted configuration changes. Database storage persists in a named volume. Published ports bind to loopback only.
+Compose supplies local defaults and reads blank/public Supabase settings from root `.env` (copy root `.env.example`). Login needs the settings in [authentication.md](docs/authentication.md). Edit Compose values when customizing its environment. Backend source directories are bind-mounted for reload. Frontend source is copied into the image to avoid incomplete Next.js route discovery on Windows bind mounts. After frontend edits, run `docker compose up -d --build frontend`; a restart alone does not copy changed source. Webpack remains the development bundler. Database storage persists in a named volume. Published ports bind to loopback only.
 
 | Resource | URL |
 | --- | --- |
 | Frontend | http://localhost:3000 |
 | Connectivity page | http://localhost:3000/health |
-| Backend base | http://localhost:8000 (no root route) |
-| Swagger | http://localhost:8000/docs |
-| OpenAPI | http://localhost:8000/api/v1/openapi.json |
-| Health | http://localhost:8000/api/v1/health |
+| Backend base | http://localhost:18000 (no root route) |
+| Swagger | http://localhost:18000/docs |
+| OpenAPI | http://localhost:18000/api/v1/openapi.json |
+| Health | http://localhost:18000/api/v1/health |
 
 Health returns `{"status":"ok"}`. The frontend displays `checking`, then `backend connected` or `backend unavailable`, with a five-second timeout. This proves API liveness, not database readiness. Compose checks PostGIS separately.
 
-Browser requests use the host's `localhost:8000`. Container-side frontend health checks use `API_INTERNAL_BASE_URL=http://backend:8000`; the backend database host is `db`. Docker service names must not be used in browser-visible URLs.
+Browser requests use the host's `localhost:18000`. Container-side frontend health checks use `API_INTERNAL_BASE_URL=http://backend:8000`; the backend database host is `db`. Docker service names must not be used in browser-visible URLs.
 
 ```sh
 docker compose ps
@@ -144,3 +144,14 @@ In a browser, open `/`, follow the health link, and confirm `backend connected`.
 See [Phase 2 verification](docs/phase2-verification.md) for current results and [Phase 1 verification](docs/bootstrap-verification.md) for the historical bootstrap report.
 
 Phase 3: [CSV import setup and manual test](docs/imports.md) · [verification report](docs/phase3-verification.md). Apply migration 0002_csv_imports after rebuilding; existing Auth settings and public redirect origin remain unchanged.
+
+Docker publishes the API on port 18000 by default because port 8000 is reserved by Windows on the development machine. Set `API_PORT` in root `.env` to override both the published port and browser API URL together. The API still listens on 8000 inside Docker. Host-only development still uses port 8000; set `frontend/.env.local` accordingly.
+
+## Phase 6 public accommodation market
+
+See [setup and manual checks](docs/public-accommodation-market.md), [official source investigation](docs/public-accommodation-source.md) and [verification](docs/phase6-verification.md). Apply additive migration 0004_public_accommodation after rebuilding. The official REST API is connected using backend-only PUBLIC_ACCOMMODATION_API_KEY. The page requires a successful sync and confirmed property district. No new dependency is required. Existing Docker URLs and Webpack workaround remain unchanged.
+
+## 공공 숙박업 API 연결
+
+공식 REST API 연결과 로컬 실행 방법은 [API 연동 검증](docs/public-api-verification.md)을 참조하세요.
+루트 .env의 PUBLIC_ACCOMMODATION_API_KEY는 backend에만 전달합니다. 전체 수집 완료 후 구·군 집계를 제공합니다.

@@ -135,3 +135,17 @@ distinguish aggregate zero from evidence of no business activity. No channels en
 See [metrics.md](metrics.md) for formulas, status policy, rounding, source and missing-data semantics,
 and [dashboard.md](dashboard.md) for authenticated diagnostics and manual reconciliation.
 Phase 4 expense summary retains all-status semantics; Phase 5 excludes CANCELLED.
+
+## Phase 6 public accommodation context
+
+GET /api/v1/market/accommodations?property_id=<UUID>&reference_date=<YYYY-MM-DD>
+requires existing Bearer + X-Organization-Id authorization. Reference date defaults to Seoul today;
+future dates and dates before 1901-01-01 return 422. Foreign properties return 404, nonmembers 403,
+missing/invalid auth 401. No provider calls or writes occur during this request.
+Response: property_id, region (SIGUNGU/name/admin association), reference/window dates,
+market_context_available, reason, nullable metrics, freshness, warnings, source_category=public,
+calculation_version=license-market-v1. Missing region and unsynchronized coverage return 200 with
+PROPERTY_REGION_UNAVAILABLE / NOT_SYNCHRONIZED and metrics=null. Confirmed zero needs a completed
+coverage assertion. Closure/new counts remain null when necessary dates are unavailable.
+See [market contract](public-accommodation-market.md). The live REST adapter is implemented; availability still requires a successful sync and district association.
+Current Docker host API is http://localhost:18000; the initial 8000 examples above are historical/host-only.

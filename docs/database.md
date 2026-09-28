@@ -148,3 +148,17 @@ role and transaction-local forced RLS still apply; no alembic_version privileges
 Reservation gross and fees retain NUMERIC storage. Analytical allocation uses PostgreSQL numeric
 arithmetic, never float, and does not rewrite reservation rows or manufacture expense entries.
 See [metrics.md](metrics.md) for dashboard-v1 and [dashboard.md](dashboard.md) for usage.
+
+## Implemented Phase 6 public context foundation
+
+0004_public_accommodation adds app.regions, app.public_accommodation_licenses and
+app.public_data_sync_runs, plus nullable region_id/region_address/region_road_address on properties.
+Existing owner rows/amounts are preserved; 0001–0003 stay unchanged. Region UUIDs are internal,
+not unverified official codes. Addresses/coordinates are never overwritten by market matching.
+Shared tables revoke PUBLIC grants; runtime has SELECT only, command ingestion role INSERT/UPDATE
+only on licenses/runs. They are explicitly non-tenant public context without RLS; property RLS and
+explicit organization authorization remain mandatory. No browser DB roles/grants are added.
+Unique source/record ID, region/source and source/run-time indexes support actual queries.
+No coordinates, raw payload, personal contact fields or speculative spatial index are stored.
+See [schema and sync semantics](public-accommodation-market.md). Live REST API mapping is documented in public-accommodation-source.md;
+these tables do not imply successful live ingestion. Older market-schema diagrams remain proposals.

@@ -50,3 +50,7 @@ Use pnpm for the frontend workspace and uv for the backend. Run these root comma
 These commands require installed dependencies, pnpm and uv. For documentation-only work, check Markdown structure, relative links, whitespace, and cross-document consistency. Never conceal skipped checks. Follow the current `frontend/` and `backend/` layout. Swagger `/docs` is the explicitly requested tooling exception; application APIs remain under `/api/v1`. Do not add shadcn/ui, authentication, or Supabase integration during bootstrap.
 
 Required feature coverage includes tenant isolation across every operation, expired/invalid tokens and revoked membership, pooled-connection context isolation, CSV validation/idempotency/rollback, cross-month metric calculations and missing denominators, source/estimate labels, and benchmark suppression. Run relevant browser journeys and accessibility checks for user-facing features. Report what changed, actual checks/results, and unresolved limitations.
+
+## Phase 6 public market foundation
+
+Read docs/public-accommodation-market.md and docs/public-accommodation-source.md for the narrow license-market-v1 contract. The official REST API adapter is implemented; read the source mapping and API verification report. Do not turn synthetic internal DTO tests into a production provider. Preserve dashboard-v1 and the Docker route-discovery workaround. No maps, visitors, events, benchmark or Phase 7 is included.
