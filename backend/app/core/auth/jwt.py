@@ -45,7 +45,10 @@ def verify_access_token(token: str) -> AuthenticatedUser:
         )
         if claims["role"] != "authenticated" or claims.get("is_anonymous", False):
             raise jwt.InvalidTokenError()
-        return AuthenticatedUser(UUID(claims["sub"]))
+        user_id = UUID(claims["sub"])
+        if settings.app_env == "staging" and user_id not in settings.staging_allowed_user_ids:
+            raise HTTPException(403, "Private staging access required")
+        return AuthenticatedUser(user_id)
     except PyJWKClientConnectionError as error:
         raise HTTPException(503, "Authentication provider is unavailable") from error
     except (jwt.PyJWTError, ValueError, TypeError, KeyError) as error:

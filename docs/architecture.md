@@ -199,3 +199,11 @@ Operating profit is NOT implemented in Phase 4. See [expenses.md](expenses.md).
 - ADR-041: Explicit user-selected market region replaces ADR-037's admin-only/address-snapshot validity rule. Reuse normalized regions and nullable property.region_id; address changes do not change market scope. Shared service validates supported Busan sigungu records for HTTP and maintenance commands. No geocoding or provider calls on save. See [property regions](property-region.md).
 - ADR-042: Region reference lookup requires verified JWT but no organization selector because it is shared reference data. Property writes still revalidate membership and use scoped SQL plus forced RLS. Add migration 0005 only for UPDATE(region_id), preserving all other column grants and data.
 - ADR-043: Keep region optional; PATCH omission preserves, null clears. Market assignment_method now means EXPLICIT_SELECTION without claiming admin verification or actor history. Legacy snapshots remain unused. No financial/public metric definitions change.
+
+## Phase 8 decisions
+
+- ADR-044: Vercel frontend + Render non-root Docker API + existing Supabase PostgreSQL candidate, conditional on the hosted compatibility gate. Separate Dockerfile.prod preserves local Compose. No provider switch, service-role runtime or automatic migration.
+- ADR-045: One Render Cron reuses the existing command and restricted collector role at 00:00 UTC / 09:00 KST. Billable resource creation requires approval. CI is validation-only and uses ephemeral PostGIS, never staging.
+- ADR-046: Private staging uses platform frontend protection plus a backend UUID admission allowlist after normal signed JWT verification. Tenant membership/RLS remain authoritative; CORS alone is insufficient privacy.
+- ADR-047: Alembic 0006 ensures PostGIS without moving/deleting existing installations. Hosted preflight is transactional and rolls back; login provisioning is an explicit operator action. Readiness is separate from liveness and checks restricted-role/schema/RLS readiness without tenant reads.
+- ADR-048: Hosted startup/request logs omit secrets/raw queries/exception text. Unexpected hosted errors are generic; development exception behavior is preserved. Backups and restores are manual, documented and unverified until actual staging exercises. See [deployment](staging-deployment.md).

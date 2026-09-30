@@ -1,6 +1,7 @@
 from functools import lru_cache
 from typing import Annotated, Literal
 from urllib.parse import urlsplit
+from uuid import UUID
 
 from pydantic import SecretStr, field_validator
 from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
@@ -16,6 +17,14 @@ class Settings(BaseSettings):
     cors_origins: Annotated[list[str], NoDecode] = []
     supabase_url: str = ""
     supabase_jwt_audience: str = "authenticated"
+    staging_allowed_user_ids: Annotated[list[UUID], NoDecode] = []
+
+    @field_validator("staging_allowed_user_ids", mode="before")
+    @classmethod
+    def parse_staging_users(cls, value: object) -> object:
+        if isinstance(value, str):
+            return [item.strip() for item in value.split(",") if item.strip()]
+        return value
 
     @field_validator("supabase_url")
     @classmethod

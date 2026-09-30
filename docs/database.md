@@ -171,3 +171,7 @@ and immutable organization ownership remain intact. Downgrade revokes that colum
 Legacy region_address/region_road_address values remain stored but no longer gate market reads.
 Address and market-analysis region are independent; no backfill or inferred assignments occur.
 See [region contract](property-region.md) for nullable input, existing rows and maintenance commands.
+
+## Phase 8 hosted deployment contract
+
+Head is now 0006_postgis_availability (local application database may remain at 0005 until explicitly migrated). This only ensures PostGIS exists; downgrade intentionally retains the shared extension. Existing tenant tables, policies, column grants and calculation contracts are unchanged. [Hosted deployment](staging-deployment.md) requires a direct/session TLS compatibility probe before migrations, a one-time admin connection, restricted stay_insight_app runtime and separate stay_insight_collector ingestion login. No hosted migration or provision was performed. Never upload the local database. See [backup/restore](backup-restore.md).

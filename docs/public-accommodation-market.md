@@ -136,3 +136,7 @@ docker compose run --rm --no-deps frontend pnpm test
 숙소 지역 지정은 관리자 확인 명령을 유지한다. 사용자 위치/GPS/지도, 자동 스케줄러는 추가하지 않았다.
 수집 중 원본 변경에 대한 snapshot token은 없으므로 엄격한 동일시점 snapshot을 보장하지 않는다.
 최신 API 연결 검증은 [API 연동 검증](public-api-verification.md)을 참조한다.
+
+## Phase 8 remote execution preparation
+
+[Staging operations](staging-operations.md) selects one Render Cron Job invoking the existing python module daily at 00:00 UTC (09:00 KST). It uses MARKET_DATABASE_URL with a separate restricted collector login and backend-only provider key. No scheduler was deployed or successful remote run claimed. The local automation remains unchanged pending remote verification; never aim both at the same staging DB. license-market-v1, locking, atomic publication and source/freshness semantics are unchanged.

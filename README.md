@@ -162,3 +162,7 @@ See [setup and manual checks](docs/public-accommodation-market.md), [official so
 선택은 시장 분석 범위이며 실제 주소를 바꾸지 않습니다. 기존 수집 데이터가 있어야 숫자가 나옵니다.
 최초 반영에는 0005_property_region_write 권한 마이그레이션과 frontend 이미지 재빌드가 필요합니다.
 [실행 명령과 기능 계약](docs/property-region.md) · [검증 결과](docs/phase7-verification.md).
+
+## Private staging (Phase 8)
+
+Repository preparation only; no live staging deployment is claimed. Follow [deployment](docs/staging-deployment.md), [operations](docs/staging-operations.md), and [backup/restore](docs/backup-restore.md). Existing local Docker commands remain unchanged. Hosted migration requires the compatibility gate; do not copy local/demo data.

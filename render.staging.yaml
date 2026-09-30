@@ -1,0 +1,41 @@
+# Prepared only. Applying this Blueprint creates BILLABLE resources; approve costs first.
+services:
+  - type: web
+    name: stay-insight-staging-api
+    runtime: docker
+    plan: 0.5c-512mb
+    branch: phase8/staging-deployment
+    autoDeployTrigger: "off"
+    dockerfilePath: ./backend/Dockerfile.prod
+    dockerContext: ./backend
+    healthCheckPath: /api/v1/ready
+    envVars:
+      - key: APP_ENV
+        value: staging
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_JWT_AUDIENCE
+        value: authenticated
+      - key: CORS_ORIGINS
+        sync: false
+      - key: STAGING_ALLOWED_USER_IDS
+        sync: false
+  - type: cron
+    name: stay-insight-staging-mois
+    runtime: docker
+    plan: 0.5c-512mb
+    branch: phase8/staging-deployment
+    autoDeployTrigger: "off"
+    dockerfilePath: ./backend/Dockerfile.prod
+    dockerContext: ./backend
+    dockerCommand: python -m app.jobs.sync_accommodation_licenses
+    schedule: "0 0 * * *" # UTC 00:00 = Asia/Seoul 09:00
+    envVars:
+      - key: APP_ENV
+        value: staging
+      - key: MARKET_DATABASE_URL
+        sync: false
+      - key: PUBLIC_ACCOMMODATION_API_KEY
+        sync: false
