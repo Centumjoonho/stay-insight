@@ -175,3 +175,7 @@ See [region contract](property-region.md) for nullable input, existing rows and 
 ## Phase 8 hosted deployment contract
 
 Head is now 0006_postgis_availability (local application database may remain at 0005 until explicitly migrated). This only ensures PostGIS exists; downgrade intentionally retains the shared extension. Existing tenant tables, policies, column grants and calculation contracts are unchanged. [Hosted deployment](staging-deployment.md) requires a direct/session TLS compatibility probe before migrations, a one-time admin connection, restricted stay_insight_app runtime and separate stay_insight_collector ingestion login. No hosted migration or provision was performed. Never upload the local database. See [backup/restore](backup-restore.md).
+
+## Phase 9 gated foundation
+
+No visitor table, region mapping, grant or migration was added. File head remains 0006_postgis_availability; local application DB was not migrated. Future visitor persistence requires verified official period/code/value/uniqueness semantics and an additive migration. Existing public_data_sync_runs is the preferred audit structure, with MOIS records preserved. See [source gate](tourism-visitor-source.md).

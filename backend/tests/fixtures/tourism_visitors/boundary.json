@@ -1,0 +1,27 @@
+{
+  "response": {
+    "header": {
+      "resultCode": "0000",
+      "resultMsg": "OK"
+    },
+    "body": {
+      "items": {
+        "item": [
+          {
+            "signguCode": "11110",
+            "signguNm": "종로구",
+            "daywkDivCd": "1",
+            "daywkDivNm": "월요일",
+            "touDivCd": "1",
+            "touDivNm": "현지인(a)",
+            "touNum": "177828.0",
+            "baseYmd": "20260831"
+          }
+        ]
+      },
+      "numOfRows": 1,
+      "pageNo": 1,
+      "totalCount": 807
+    }
+  }
+}

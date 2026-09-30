@@ -166,3 +166,7 @@ See [setup and manual checks](docs/public-accommodation-market.md), [official so
 ## Private staging (Phase 8)
 
 Repository preparation only; no live staging deployment is claimed. Follow [deployment](docs/staging-deployment.md), [operations](docs/staging-operations.md), and [backup/restore](docs/backup-restore.md). Existing local Docker commands remain unchanged. Hosted migration requires the compatibility gate; do not copy local/demo data.
+
+## Phase 9 visitor source investigation
+
+**LIVE VISITOR PROVIDER NOT VERIFIED.** An official daily candidate is identified, but monthly publication/semantics and region mapping remain unresolved. Only internal contracts, a disabled provider and tests are added; no visitor sync command, data table, endpoint or chart yet. [Source evidence](docs/tourism-visitor-source.md) · [scope and local checks](docs/tourism-visitors.md). Existing Phase 8 preparation and local Docker behavior are preserved.

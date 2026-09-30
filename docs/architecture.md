@@ -207,3 +207,7 @@ Operating profit is NOT implemented in Phase 4. See [expenses.md](expenses.md).
 - ADR-046: Private staging uses platform frontend protection plus a backend UUID admission allowlist after normal signed JWT verification. Tenant membership/RLS remain authoritative; CORS alone is insufficient privacy.
 - ADR-047: Alembic 0006 ensures PostGIS without moving/deleting existing installations. Hosted preflight is transactional and rolls back; login provisioning is an explicit operator action. Readiness is separate from liveness and checks restricted-role/schema/RLS readiness without tenant reads.
 - ADR-048: Hosted startup/request logs omit secrets/raw queries/exception text. Unexpected hosted errors are generic; development exception behavior is preserved. Backups and restores are manual, documented and unverified until actual staging exercises. See [deployment](staging-deployment.md).
+
+## Phase 9 source discovery boundary
+
+- ADR-049: The official KTO regional-visitor candidate exposes daily operations; an official monthly contract and Busan mapping are not yet verified. Follow the requested source gate: only a fail-closed provider interface/internal daily DTO, tests and documentation. No daily-to-monthly aggregation, speculative persistence, public endpoint or UI. See [source decision](tourism-visitor-source.md) and [implementation boundary](tourism-visitors.md). Existing Phase 1–8 contracts and files are preserved.

@@ -1,0 +1,1 @@
+{"responseTime":"2026-09-30T17:48:50.499","resultCode":"11","resultMsg":"NO_MANDATORY_REQUEST_PARAMETERS_ERROR1(startYmd)"}

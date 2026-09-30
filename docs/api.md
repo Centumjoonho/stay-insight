@@ -165,3 +165,7 @@ Market response region.assignment_method is now EXPLICIT_SELECTION; it includes 
 admin choices without claiming administrator verification for new owner choices. Scope derives from
 current property.region_id, independent of legacy address snapshots. All count/freshness/source
 semantics stay license-market-v1. See [region behavior](property-region.md).
+
+## Phase 9 source gate
+
+No visitor HTTP endpoint is registered. /api/v1/market/visitors is a proposed name only, not an available route. No page-load external visitor calls or changes to accommodation responses. Source verification must precede persistence/read API/UI implementation; see [visitor status](tourism-visitors.md).
