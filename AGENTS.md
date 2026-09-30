@@ -54,3 +54,11 @@ Required feature coverage includes tenant isolation across every operation, expi
 ## Phase 6 public market foundation
 
 Read docs/public-accommodation-market.md and docs/public-accommodation-source.md for the narrow license-market-v1 contract. The official REST API adapter is implemented; read the source mapping and API verification report. Do not turn synthetic internal DTO tests into a production provider. Preserve dashboard-v1 and the Docker route-discovery workaround. No maps, visitors, events, benchmark or Phase 7 is included.
+
+## Next session
+
+Read [next steps](docs/next-steps.md) for the user's recorded priority before proposing new work.
+
+## Phase 7 self-service property region
+
+[Property regions](docs/property-region.md) supersedes the Phase 6 admin-only/address-snapshot association rule. Optional normalized Busan selection is available through authenticated property create/edit. Migration 0005 grants only region_id UPDATE; tenant RLS, Phase 6 sync/metrics and dashboard-v1 remain unchanged. Read [verification](docs/phase7-verification.md) before subsequent work. Existing next-session notes above are historical priorities, now addressed by Phase 7.
