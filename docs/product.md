@@ -119,3 +119,11 @@ The property-local market page and authenticated local-DB aggregate contract are
 Official MOIS lodging REST API ingestion is implemented; successful complete collection gates metrics.
 See [public market](public-accommodation-market.md) and [source decision](public-accommodation-source.md).
 Live counts require successful ingestion and confirmed property district. Visitor/event/map/benchmark features are excluded. dashboard-v1 is unchanged.
+
+## Implemented Phase 7 property region selection
+
+Users can select, change or clear a normalized Busan sigungu during property registration/edit.
+It is optional market-analysis scope, independent from address; no automatic geocoding or legal
+address verification is claimed. Existing assigned regions remain selected. Unassigned properties
+show a setup link instead of a Busan-wide fallback. Public collection and dashboard-v1 are unchanged.
+See [property-region.md](property-region.md).

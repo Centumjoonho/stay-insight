@@ -12,6 +12,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
   });
   return <section><h1 className="text-2xl font-semibold">{property.name}</h1>
     <dl className="mt-6 grid gap-3 rounded border bg-white p-6">
+      <div><dt>지역 시장 기준</dt><dd>{property.region ? property.region.sido_name + " " + property.region.sigungu_name : "미설정"}</dd></div>
       <div><dt>주소</dt><dd>{property.address}</dd></div>
       <div><dt>도로명 주소</dt><dd>{property.road_address || "미입력"}</dd></div>
       <div><dt>숙소 유형</dt><dd>{property.accommodation_type}</dd></div>
@@ -20,6 +21,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
       <div><dt>위도 / 경도</dt><dd>{property.latitude ?? "미입력"} / {property.longitude ?? "미입력"}</dd></div>
     </dl>
     <nav className="mt-6 flex flex-wrap gap-4">
+      <Link className="underline" href={"/properties/" + id + "/edit"}>숙소 정보 수정</Link>
       <Link className="underline" href={`/properties/${id}/market`}>지역 시장</Link>
       <Link className="underline" href={`/properties/${id}/dashboard`}>대시보드</Link>
       <Link className="underline" href={`/properties/${id}/expenses`}>비용 관리</Link>

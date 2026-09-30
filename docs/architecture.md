@@ -193,3 +193,9 @@ Operating profit is NOT implemented in Phase 4. See [expenses.md](expenses.md).
   statuses/categories remain explicit. A source reference date is not inferred from the advertised
   two-day delay. Offset pagination is not a guaranteed same-instant snapshot. See
   [source mappings](public-accommodation-source.md) and [verification](public-api-verification.md).
+
+## Phase 7 decisions
+
+- ADR-041: Explicit user-selected market region replaces ADR-037's admin-only/address-snapshot validity rule. Reuse normalized regions and nullable property.region_id; address changes do not change market scope. Shared service validates supported Busan sigungu records for HTTP and maintenance commands. No geocoding or provider calls on save. See [property regions](property-region.md).
+- ADR-042: Region reference lookup requires verified JWT but no organization selector because it is shared reference data. Property writes still revalidate membership and use scoped SQL plus forced RLS. Add migration 0005 only for UPDATE(region_id), preserving all other column grants and data.
+- ADR-043: Keep region optional; PATCH omission preserves, null clears. Market assignment_method now means EXPLICIT_SELECTION without claiming admin verification or actor history. Legacy snapshots remain unused. No financial/public metric definitions change.

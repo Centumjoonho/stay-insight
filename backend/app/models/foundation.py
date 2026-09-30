@@ -76,8 +76,8 @@ class Property(Base):
     name: Mapped[str] = mapped_column(String(200))
     address: Mapped[str] = mapped_column(String(500))
     road_address: Mapped[str | None] = mapped_column(String(500))
-    # Defer additive market fields; existing property reads do not need them.
-    region_id: Mapped[UUID | None] = mapped_column(ForeignKey("app.regions.id"), deferred=True)
+    # Legacy address snapshots are retained for compatibility, not used for region validity.
+    region_id: Mapped[UUID | None] = mapped_column(ForeignKey("app.regions.id"))
     region_address: Mapped[str | None] = mapped_column(String(500), deferred=True)
     region_road_address: Mapped[str | None] = mapped_column(String(500), deferred=True)
     latitude: Mapped[float | None]

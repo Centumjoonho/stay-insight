@@ -22,7 +22,7 @@ const views = load("../src/components/market-view.tsx", { "next/link": links }) 
 // DEVELOPMENT / TEST ONLY: synthetic API DTO, not an upstream file or actual market data.
 function fixture(): AccommodationMarket {
   return {
-    property_id: "test-property", region: { scope_level: "SIGUNGU", scope_name: "부산광역시 수영구", assignment_method: "ADMIN_CONFIRMED" },
+    property_id: "test-property", region: { scope_level: "SIGUNGU", scope_name: "부산광역시 수영구", assignment_method: "EXPLICIT_SELECTION" },
     reference_date: "2026-09-28", window_start: "2025-09-29", window_end: "2026-09-28",
     market_context_available: true, reason: null,
     metrics: { open_businesses: 12, new_licenses_12m: 3, closures_12m: null,
@@ -48,8 +48,9 @@ test("market unavailable region/sync hides numerical cards; confirmed zero remai
   const data = fixture();
   data.market_context_available = false; data.metrics = null; data.region = null;
   data.reason = "PROPERTY_REGION_UNAVAILABLE";
-  assert.match(render(data), /숙소 지역 정보가 없어 지역 시장 데이터를 연결할 수 없습니다/);
+  assert.match(render(data), /지역 시장 정보를 보려면 숙소의 부산 구·군을 설정해 주세요/);
   assert.doesNotMatch(render(data), /0개|12개/);
+  assert.ok(render(data).includes("/properties/test-property/edit"));
   data.reason = "NOT_SYNCHRONIZED";
   data.freshness.collected_at = null;
   assert.match(render(data), /아직 수집되지 않았거나/);
@@ -116,4 +117,16 @@ test("market server client forwards bearer/org, no-store, and redirects 401", as
   }) as typeof import("../src/lib/api/server");
   assert.equal((await server.serverApi.accommodationMarket("org", "id")).source_category, "public");
   fail = true; await assert.rejects(server.serverApi.accommodationMarket("org", "id"), /LOGIN/);
+});
+test("market view follows new API region scope and retains source timestamp", () => {
+  const data = fixture();
+  const before = render(data);
+  data.region!.scope_name = "부산광역시 해운대구";
+  data.metrics!.open_businesses = 24;
+  const after = render(data);
+  assert.match(before, /부산광역시 수영구/);
+  assert.match(after, /부산광역시 해운대구/);
+  assert.match(after, /24개/);
+  assert.doesNotMatch(after, /부산광역시 수영구/);
+  assert.match(after, /행정안전부_문화_숙박업/);
 });

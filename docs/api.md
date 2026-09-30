@@ -1,6 +1,6 @@
 # Phase 2 API
 
-FastAPI is authoritative. Base URL locally: `http://localhost:8000`. Swagger: `/docs`. OpenAPI: `/api/v1/openapi.json`. Auth and business responses must not be shared-cached.
+FastAPI is authoritative. Base URL in local Docker: `http://localhost:18000`. Swagger: `/docs`. OpenAPI: `/api/v1/openapi.json`. Auth and business responses must not be shared-cached.
 
 ## Endpoints
 
@@ -149,3 +149,19 @@ PROPERTY_REGION_UNAVAILABLE / NOT_SYNCHRONIZED and metrics=null. Confirmed zero 
 coverage assertion. Closure/new counts remain null when necessary dates are unavailable.
 See [market contract](public-accommodation-market.md). The live REST adapter is implemented; availability still requires a successful sync and district association.
 Current Docker host API is http://localhost:18000; the initial 8000 examples above are historical/host-only.
+
+## Phase 7 property region selection
+
+GET /api/v1/regions requires Bearer authentication, no organization header. Optional sido defaults
+to 부산광역시 and level to SIGUNGU; unsupported scope returns 422. Returns an array of
+{id, sido_name, sigungu_name, region_level} from supported normalized DB rows. No source raw payload.
+
+POST/PATCH /api/v1/properties accept region_id (UUID or null). POST omission/null means unset;
+PATCH omission preserves, null clears. Unsupported/nonexistent region returns 422. Existing
+organization membership, tenant-scoped 404 and RLS remain mandatory. Property create/detail/list/update
+responses add region_id and region (reference object or null). Addresses do not infer/change region.
+
+Market response region.assignment_method is now EXPLICIT_SELECTION; it includes legacy explicit
+admin choices without claiming administrator verification for new owner choices. Scope derives from
+current property.region_id, independent of legacy address snapshots. All count/freshness/source
+semantics stay license-market-v1. See [region behavior](property-region.md).

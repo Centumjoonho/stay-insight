@@ -23,9 +23,10 @@ export function MarketView({ data }: { data: AccommodationMarket }) {
     </nav>
     {!data.market_context_available && <p role="status" className="rounded border bg-white p-5">
       {data.reason === "PROPERTY_REGION_UNAVAILABLE"
-        ? "숙소 지역 정보가 없어 지역 시장 데이터를 연결할 수 없습니다."
+        ? "지역 시장 정보를 보려면 숙소의 부산 구·군을 설정해 주세요."
         : "공식 숙박업 자료가 아직 수집되지 않았거나 해당 지역의 수집 범위를 확인할 수 없습니다."}
     </p>}
+    {data.reason === "PROPERTY_REGION_UNAVAILABLE" && <Link className="underline" href={base + "/edit"}>숙소 정보 수정</Link>}
     {!freshness.live_provider_verified && <p className="text-sm text-amber-900">
       공식 데이터 파일의 연결·필드 검증이 완료되지 않아 실데이터 수집은 준비 중입니다.
     </p>}

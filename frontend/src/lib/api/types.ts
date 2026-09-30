@@ -1,3 +1,5 @@
+import type { MarketRegion } from "./region-types";
+
 // API transport contracts. No database access or business calculation logic.
 export type AccommodationType = "HOTEL" | "MOTEL" | "HOSTEL" | "GUESTHOUSE" |
   "LIFESTYLE_ACCOMMODATION" | "PENSION" | "VACATION_RENTAL" | "OTHER";
@@ -7,6 +9,7 @@ export interface MeResponse {
 }
 export interface OrganizationResponse { id: string; name: string; created_at: string; updated_at: string }
 export interface PropertyCreate {
+  region_id?: string | null;
   name: string;
   address: string;
   road_address?: string | null;
@@ -17,6 +20,7 @@ export interface PropertyCreate {
   timezone?: "Asia/Seoul";
 }
 export interface PropertyResponse extends PropertyCreate {
+  region: MarketRegion | null;
   id: string; organization_id: string; created_at: string; updated_at: string; timezone: "Asia/Seoul";
 }
 export interface PropertyListResponse { items: PropertyResponse[]; total: number }

@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 class MarketRegion(BaseModel):
     scope_level: Literal["SIGUNGU"] = "SIGUNGU"
     scope_name: str
-    assignment_method: Literal["ADMIN_CONFIRMED"] = "ADMIN_CONFIRMED"
+    assignment_method: Literal["EXPLICIT_SELECTION"] = "EXPLICIT_SELECTION"
 
 
 class MarketMetrics(BaseModel):

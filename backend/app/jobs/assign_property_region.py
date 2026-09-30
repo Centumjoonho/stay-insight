@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.db.session import get_engine
 from app.providers.accommodation import BUSAN_DISTRICTS
-from app.repositories.market import assign_property_region
+from app.services.regions import assign_property_region
 
 
 def main() -> None:

@@ -33,7 +33,7 @@ def create_property(
     db: Database,
     org_id: OrganizationContext,
 ) -> PropertyResponse:
-    return PropertyResponse.model_validate(service.create_property(db, org_id, body))
+    return service.property_response(db, service.create_property(db, org_id, body))
 
 
 @router.get("/properties", response_model=PropertyListResponse)
@@ -52,7 +52,7 @@ def property_detail(
     db: Database,
     org_id: OrganizationContext,
 ) -> PropertyResponse:
-    return PropertyResponse.model_validate(service.get_property(db, org_id, property_id))
+    return service.property_response(db, service.get_property(db, org_id, property_id))
 
 
 @router.patch("/properties/{property_id}", response_model=PropertyResponse)
@@ -62,4 +62,4 @@ def update_property(
     db: Database,
     org_id: OrganizationContext,
 ) -> PropertyResponse:
-    return PropertyResponse.model_validate(service.update_property(db, org_id, property_id, body))
+    return service.property_response(db, service.update_property(db, org_id, property_id, body))

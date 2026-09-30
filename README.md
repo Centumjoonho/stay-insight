@@ -1,6 +1,6 @@
 # Stay Insight
 
-Korean accommodation business management SaaS, initially focused on Busan. Phase 2 adds Supabase authentication, organization onboarding, memberships and property registration/list/detail/update APIs. Business data stays on local PostgreSQL/PostGIS. Read [authentication setup](docs/authentication.md) before using the new flow; no reservations, financial features or market data are implemented.
+Korean accommodation business management SaaS, initially focused on Busan. Phases 1–7 implement authentication, organization/property management, CSV imports, expenses, dashboard-v1, official public lodging context and self-service Busan region selection. Business data stays on local PostgreSQL/PostGIS; hosted Supabase is used for Auth. Read [authentication setup](docs/authentication.md) and [property regions](docs/property-region.md).
 
 ## Repository
 
@@ -28,7 +28,7 @@ Read [AGENTS.md](AGENTS.md) and [docs/product.md](docs/product.md) before change
 
 - Docker Desktop with Linux containers and Docker Compose v2 for the full stack.
 - For host development/checks: Node.js 24 LTS, pnpm 11.19.0, Python 3.12+, uv 0.12.17.
-- Ports 3000, 8000 and 5432 available; registry access for dependencies/images.
+- Ports 3000, 18000 and 5432 available for Compose; registry access for dependencies/images.
 
 Install pnpm with `npm install --global pnpm@11.19.0` if needed. Follow the [uv installation guide](https://docs.astral.sh/uv/getting-started/installation/) for uv.
 
@@ -155,3 +155,10 @@ See [setup and manual checks](docs/public-accommodation-market.md), [official so
 
 공식 REST API 연결과 로컬 실행 방법은 [API 연동 검증](docs/public-api-verification.md)을 참조하세요.
 루트 .env의 PUBLIC_ACCOMMODATION_API_KEY는 backend에만 전달합니다. 전체 수집 완료 후 구·군 집계를 제공합니다.
+
+## Phase 7 숙소 지역 직접 설정
+
+숙소 등록·정보 수정에서 부산 구·군을 선택하면 관리자 명령 없이 지역 시장을 볼 수 있습니다.
+선택은 시장 분석 범위이며 실제 주소를 바꾸지 않습니다. 기존 수집 데이터가 있어야 숫자가 나옵니다.
+최초 반영에는 0005_property_region_write 권한 마이그레이션과 frontend 이미지 재빌드가 필요합니다.
+[실행 명령과 기능 계약](docs/property-region.md) · [검증 결과](docs/phase7-verification.md).

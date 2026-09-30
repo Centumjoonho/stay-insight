@@ -303,8 +303,20 @@ def test_phase3_migration_preserves_phase2_data(context: SimpleNamespace) -> Non
         headers, prop = setup(client)
         config = Config(str(Path(__file__).resolve().parents[1] / "alembic.ini"))
         command.downgrade(config, "0001_foundation")
-        assert client.get("/api/v1/properties/" + prop, headers=headers).status_code == 200
-        command.upgrade(config, "head")
+        try:
+            # Historical schema is verified with historical columns; current API needs head.
+            with context.db.admin.connect() as db:
+                assert (
+                    db.scalar(
+                        text(
+                            "SELECT name FROM app.properties WHERE id=:id AND organization_id=:org"
+                        ),
+                        {"id": prop, "org": headers["X-Organization-Id"]},
+                    )
+                    == property_body()["name"]
+                )
+        finally:
+            command.upgrade(config, "head")
         assert client.get("/api/v1/properties/" + prop, headers=headers).status_code == 200
         assert upload(client, headers, prop).json()["status"] == "COMPLETED"
 

@@ -5,6 +5,7 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from app.models.foundation import AccommodationType, Role
+from app.schemas.regions import RegionResponse
 
 Name = Annotated[str, Field(min_length=1, max_length=200)]
 Address = Annotated[str, Field(min_length=1, max_length=500)]
@@ -38,6 +39,7 @@ class MeResponse(BaseModel):
 
 
 class PropertyCreate(InputModel):
+    region_id: UUID | None = None
     name: Name
     address: Address
     road_address: Annotated[str, Field(max_length=500)] | None = None
@@ -55,6 +57,7 @@ class PropertyCreate(InputModel):
 
 
 class PropertyPatch(InputModel):
+    region_id: UUID | None = None
     name: Name | None = None
     address: Address | None = None
     road_address: Annotated[str, Field(max_length=500)] | None = None
@@ -68,13 +71,14 @@ class PropertyPatch(InputModel):
     def non_nullable_fields(self) -> "PropertyPatch":
         if not self.model_fields_set:
             raise ValueError("At least one change is required")
-        for field in self.model_fields_set - {"road_address", "latitude", "longitude"}:
+        for field in self.model_fields_set - {"road_address", "latitude", "longitude", "region_id"}:
             if getattr(self, field) is None:
                 raise ValueError(f"{field} cannot be null")
         return self
 
 
 class PropertyResponse(PropertyCreate):
+    region: RegionResponse | None = None
     model_config = ConfigDict(from_attributes=True)
     id: UUID
     organization_id: UUID

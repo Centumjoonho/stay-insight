@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.models.market import PublicAccommodationLicense as License
 from app.models.market import PublicDataSyncRun, Region
 from app.providers.accommodation import SOURCE, LicenseRecord
+from app.repositories.regions import supported_region
 
 
 def regions(db: Session) -> dict[str, Region]:
@@ -85,27 +86,23 @@ def type_counts(db: Session, region_id: UUID) -> dict[str, int]:
 def property_region(db: Session, org: UUID, property_id: UUID) -> Region | None:
     region_id = db.scalar(
         text("""SELECT region_id FROM app.properties
-        WHERE id=:id AND organization_id=:org AND region_address=address
-        AND region_road_address IS NOT DISTINCT FROM road_address"""),
+        WHERE id=:id AND organization_id=:org"""),
         {"id": property_id, "org": org},
     )
-    return db.get(Region, region_id) if region_id else None
+    return supported_region(db, region_id) if region_id else None
 
 
 def assign_property_region(
     db: Session,
     org: UUID,
     property_id: UUID,
-    district: str,
+    region_id: UUID,
     address: str,
 ) -> bool:
-    region = db.scalar(select(Region).where(Region.sigungu_name == district))
-    if region is None:
-        return False
     changed = db.scalar(
         text("""UPDATE app.properties
-        SET region_id=:region, region_address=address, region_road_address=road_address
+        SET region_id=:region, updated_at=now()
         WHERE id=:id AND organization_id=:org AND address=:address RETURNING id"""),
-        {"region": region.id, "id": property_id, "org": org, "address": address},
+        {"region": region_id, "id": property_id, "org": org, "address": address},
     )
     return changed is not None

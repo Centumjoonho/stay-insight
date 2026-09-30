@@ -34,8 +34,8 @@ stay_insight_runtime에 SELECT만, stay_insight_ingestion에 공공 데이터/�
 - app.public_data_sync_runs: 수집 시작/종료/성공/실패, 조회/삽입/수정/동일/실패 수, 확인된 구·군 범위, 자료 기준일/폐업일 지원 여부, 안전한 오류 코드.
 - app.properties: nullable region_id, region_address, region_road_address 추가. 기존 값은 유지한다.
 
-지역은 관리자 확인 명령으로만 연결한다. 정상 API에는 region 열 수정 권한이 없다.
-주소와 도로명 주소를 연결 당시 그대로 기록해 이후 주소 변경 시 시장 연결을 무효로 판단한다.
+Phase 7부터 사용자 등록·수정 화면에서 지역을 직접 선택한다.
+[지역 연결 계약](property-region.md)이 기존 관리자 전용·주소 변경 무효화 정책을 대체한다.
 주소나 좌표를 덮어쓰지 않는다. 지역이 없으면 부산 전체 숫자로 대체하지 않는다.
 공식 지역 코드와 좌표는 검증되지 않았으므로 저장하지 않는다. 동/반경/PostGIS 위치 인덱스도 없다.
 인덱스는 출처/식별자 유일성, 지역/출처 조회, 최근 출처별 수집 조회에 맞춘다.
@@ -103,7 +103,8 @@ docker compose exec -T db psql -U postgres -d stay_insight -c "SELECT status,sta
 docker compose exec -T db psql -U postgres -d stay_insight -c "SELECT source,count(*) FROM app.public_accommodation_licenses GROUP BY source;"
 ```
 
-지역 연결은 실제 주소를 확인한 관리자가 UUID와 정확한 현재 주소를 넣어 실행한다.
+아래는 선택적인 관리자 유지보수 명령이다. 일반 사용자는 숙소 정보 수정에서 구·군을 선택한다.
+관리자 명령은 실제 주소를 확인한 관리자가 UUID와 정확한 현재 주소를 넣어 실행한다.
 다음 꺾쇠 값은 사용자가 확인해 바꿔야 하는 입력이며 그대로 실행할 값이 아니다.
 명령은 organization/property를 함께 조건으로 삼고 주소가 다르면 실패한다.
 
@@ -112,7 +113,7 @@ docker compose exec -T -e DATABASE_URL=postgresql+psycopg://postgres:postgres@db
 ```
 
 1. http://localhost:3000 로그인 → 내 숙소 → 기존 숙소 → 지역 시장.
-2. 지역 미지정 숙소: '숙소 지역 정보가 없어 지역 시장 데이터를 연결할 수 없습니다.' 숫자는 표시하지 않는다.
+2. 지역 미지정 숙소: '지역 시장 정보를 보려면 숙소의 부산 구·군을 설정해 주세요.' 숫자는 표시하지 않는다.
 3. 관리자 확인으로 연결한 숙소: 구·군명, 미수집 안내, 공식 출처 링크, 수집 이력 없음. 아직 0개 카드가 나오면 오류다.
 4. 공식 출처 링크가 data.go.kr의 지정 카탈로그인지 확인한다.
 5. 실제 수집 완료 후에는 해당 구·군의 숫자와 최근 수집 시각을 표시한다.

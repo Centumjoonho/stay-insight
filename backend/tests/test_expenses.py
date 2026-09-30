@@ -398,13 +398,39 @@ def test_phase4_migration_preserves_foundation_and_reservations(context: SimpleN
             "/api/v1/reservations", headers=headers, params={"property_id": prop}
         ).json()
         config = Config(str(Path(__file__).resolve().parents[1] / "alembic.ini"))
+        with context.db.admin.connect() as db:
+            preserved = db.execute(
+                text(
+                    "SELECT id, gross_revenue FROM app.reservations "
+                    "WHERE property_id=:id AND organization_id=:org ORDER BY id"
+                ),
+                {"id": prop, "org": headers["X-Organization-Id"]},
+            ).all()
         command.downgrade(config, "0002_csv_imports")
-        assert client.get("/api/v1/properties/" + prop, headers=headers).status_code == 200
-        assert (
-            client.get("/api/v1/reservations", headers=headers, params={"property_id": prop}).json()
-            == before
-        )
-        command.upgrade(config, "head")
+        try:
+            with context.db.admin.connect() as db:
+                assert (
+                    db.scalar(
+                        text(
+                            "SELECT count(*) FROM app.properties WHERE id=:id "
+                            "AND organization_id=:org"
+                        ),
+                        {"id": prop, "org": headers["X-Organization-Id"]},
+                    )
+                    == 1
+                )
+                assert (
+                    db.execute(
+                        text(
+                            "SELECT id, gross_revenue FROM app.reservations "
+                            "WHERE property_id=:id AND organization_id=:org ORDER BY id"
+                        ),
+                        {"id": prop, "org": headers["X-Organization-Id"]},
+                    ).all()
+                    == preserved
+                )
+        finally:
+            command.upgrade(config, "head")
         assert (
             client.get("/api/v1/reservations", headers=headers, params={"property_id": prop}).json()
             == before

@@ -162,3 +162,12 @@ Unique source/record ID, region/source and source/run-time indexes support actua
 No coordinates, raw payload, personal contact fields or speculative spatial index are stored.
 See [schema and sync semantics](public-accommodation-market.md). Live REST API mapping is documented in public-accommodation-source.md;
 these tables do not imply successful live ingestion. Older market-schema diagrams remain proposals.
+
+## Implemented Phase 7 self-service region
+
+No new tables or columns. Reuse app.regions and app.properties.region_id from 0004.
+0005_property_region_write grants only UPDATE(region_id) to stay_insight_runtime; forced tenant RLS
+and immutable organization ownership remain intact. Downgrade revokes that column grant only.
+Legacy region_address/region_road_address values remain stored but no longer gate market reads.
+Address and market-analysis region are independent; no backfill or inferred assignments occur.
+See [region contract](property-region.md) for nullable input, existing rows and maintenance commands.

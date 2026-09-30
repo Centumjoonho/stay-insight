@@ -195,7 +195,9 @@ def test_market_metrics_availability_stale_and_boundaries(
             ).status_code
             == 200
         )
-        assert client.get(path, headers=headers).json()["reason"] == "PROPERTY_REGION_UNAVAILABLE"
+        assert (
+            client.get(path, headers=headers).json()["region"]["scope_name"] == "부산광역시 수영구"
+        )
 
 
 def test_confirmed_empty_coverage_and_unknown_dates(context: SimpleNamespace) -> None:
@@ -250,8 +252,9 @@ def test_tenant_membership_revocation_and_runtime_read_only(context: SimpleNames
         assert db.scalar(text("SELECT count(*) FROM app.regions")) == 16
     with pytest.raises(ProgrammingError), context.db.runtime.begin() as db:
         db.execute(text("DELETE FROM app.public_accommodation_licenses"))
-    with pytest.raises(ProgrammingError), context.db.runtime.begin() as db:
-        db.execute(text("UPDATE app.properties SET region_id=NULL"))
+    with context.db.runtime.begin() as db:
+        # Region UPDATE is granted; forced RLS hides every row without tenant context.
+        assert db.execute(text("UPDATE app.properties SET region_id=NULL")).rowcount == 0
     with pytest.raises(ProgrammingError), context.db.runtime.begin() as db:
         db.execute(text("INSERT INTO app.public_data_sync_runs(id) VALUES (:id)"), {"id": uuid4()})
     with context.db.admin.begin() as db:

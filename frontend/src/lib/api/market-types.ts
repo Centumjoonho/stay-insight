@@ -1,6 +1,6 @@
 export interface AccommodationMarket {
   property_id: string;
-  region: { scope_level: "SIGUNGU"; scope_name: string; assignment_method: "ADMIN_CONFIRMED" } | null;
+  region: { scope_level: "SIGUNGU"; scope_name: string; assignment_method: "EXPLICIT_SELECTION" } | null;
   reference_date: string;
   window_start: string;
   window_end: string;

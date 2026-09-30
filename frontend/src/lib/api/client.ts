@@ -1,3 +1,4 @@
+import type { MarketRegion } from "./region-types";
 import type { Expense, ExpenseValues } from "./expense-types";
 import type { Channel, ColumnMapping, CsvPreview, ImportResult, ValidationResult } from "./import-types";
 import { importForm } from "@/lib/imports";
@@ -22,6 +23,9 @@ async function request<T>(path: string, options?: RequestInit, organizationId?: 
 }
 
 export const businessApi = {
+  regions: () => request<MarketRegion[]>("/api/v1/regions?" + new URLSearchParams({ sido: "부산광역시", level: "SIGUNGU" })),
+  updateProperty: (org: string, id: string, body: Partial<PropertyCreate>) =>
+    request<PropertyResponse>("/api/v1/properties/" + encodeURIComponent(id), { method: "PATCH", body: JSON.stringify(body) }, org),
   createExpense: (org: string, body: ExpenseValues & { property_id: string }) =>
     request<Expense>("/api/v1/expenses", { method: "POST", body: JSON.stringify(body) }, org),
   updateExpense: (org: string, id: string, body: ExpenseValues) =>
