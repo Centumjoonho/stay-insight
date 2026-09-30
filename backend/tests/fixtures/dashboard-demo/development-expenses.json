@@ -1,0 +1,548 @@
+[
+  {
+    "expense_date": "2025-09-05",
+    "category": "RENT",
+    "cost_type": "FIXED",
+    "amount": 1200000,
+    "memo": "[개발용 더미] 2025-09 RENT"
+  },
+  {
+    "expense_date": "2025-09-05",
+    "category": "MANAGEMENT_FEE",
+    "cost_type": "FIXED",
+    "amount": 150000,
+    "memo": "[개발용 더미] 2025-09 MANAGEMENT_FEE"
+  },
+  {
+    "expense_date": "2025-09-05",
+    "category": "CLEANING",
+    "cost_type": "VARIABLE",
+    "amount": 360000,
+    "memo": "[개발용 더미] 2025-09 CLEANING"
+  },
+  {
+    "expense_date": "2025-09-05",
+    "category": "LAUNDRY",
+    "cost_type": "VARIABLE",
+    "amount": 120000,
+    "memo": "[개발용 더미] 2025-09 LAUNDRY"
+  },
+  {
+    "expense_date": "2025-09-05",
+    "category": "ELECTRICITY",
+    "cost_type": "VARIABLE",
+    "amount": 180000,
+    "memo": "[개발용 더미] 2025-09 ELECTRICITY"
+  },
+  {
+    "expense_date": "2025-09-05",
+    "category": "SUPPLIES",
+    "cost_type": "VARIABLE",
+    "amount": 80000,
+    "memo": "[개발용 더미] 2025-09 SUPPLIES"
+  },
+  {
+    "expense_date": "2025-10-05",
+    "category": "RENT",
+    "cost_type": "FIXED",
+    "amount": 1200000,
+    "memo": "[개발용 더미] 2025-10 RENT"
+  },
+  {
+    "expense_date": "2025-10-05",
+    "category": "MANAGEMENT_FEE",
+    "cost_type": "FIXED",
+    "amount": 150000,
+    "memo": "[개발용 더미] 2025-10 MANAGEMENT_FEE"
+  },
+  {
+    "expense_date": "2025-10-05",
+    "category": "CLEANING",
+    "cost_type": "VARIABLE",
+    "amount": 360000,
+    "memo": "[개발용 더미] 2025-10 CLEANING"
+  },
+  {
+    "expense_date": "2025-10-05",
+    "category": "LAUNDRY",
+    "cost_type": "VARIABLE",
+    "amount": 120000,
+    "memo": "[개발용 더미] 2025-10 LAUNDRY"
+  },
+  {
+    "expense_date": "2025-10-05",
+    "category": "ELECTRICITY",
+    "cost_type": "VARIABLE",
+    "amount": 182000,
+    "memo": "[개발용 더미] 2025-10 ELECTRICITY"
+  },
+  {
+    "expense_date": "2025-10-05",
+    "category": "SUPPLIES",
+    "cost_type": "VARIABLE",
+    "amount": 80000,
+    "memo": "[개발용 더미] 2025-10 SUPPLIES"
+  },
+  {
+    "expense_date": "2025-11-05",
+    "category": "RENT",
+    "cost_type": "FIXED",
+    "amount": 1200000,
+    "memo": "[개발용 더미] 2025-11 RENT"
+  },
+  {
+    "expense_date": "2025-11-05",
+    "category": "MANAGEMENT_FEE",
+    "cost_type": "FIXED",
+    "amount": 150000,
+    "memo": "[개발용 더미] 2025-11 MANAGEMENT_FEE"
+  },
+  {
+    "expense_date": "2025-11-05",
+    "category": "CLEANING",
+    "cost_type": "VARIABLE",
+    "amount": 360000,
+    "memo": "[개발용 더미] 2025-11 CLEANING"
+  },
+  {
+    "expense_date": "2025-11-05",
+    "category": "LAUNDRY",
+    "cost_type": "VARIABLE",
+    "amount": 120000,
+    "memo": "[개발용 더미] 2025-11 LAUNDRY"
+  },
+  {
+    "expense_date": "2025-11-05",
+    "category": "ELECTRICITY",
+    "cost_type": "VARIABLE",
+    "amount": 184000,
+    "memo": "[개발용 더미] 2025-11 ELECTRICITY"
+  },
+  {
+    "expense_date": "2025-11-05",
+    "category": "SUPPLIES",
+    "cost_type": "VARIABLE",
+    "amount": 80000,
+    "memo": "[개발용 더미] 2025-11 SUPPLIES"
+  },
+  {
+    "expense_date": "2025-12-05",
+    "category": "RENT",
+    "cost_type": "FIXED",
+    "amount": 1200000,
+    "memo": "[개발용 더미] 2025-12 RENT"
+  },
+  {
+    "expense_date": "2025-12-05",
+    "category": "MANAGEMENT_FEE",
+    "cost_type": "FIXED",
+    "amount": 150000,
+    "memo": "[개발용 더미] 2025-12 MANAGEMENT_FEE"
+  },
+  {
+    "expense_date": "2025-12-05",
+    "category": "CLEANING",
+    "cost_type": "VARIABLE",
+    "amount": 360000,
+    "memo": "[개발용 더미] 2025-12 CLEANING"
+  },
+  {
+    "expense_date": "2025-12-05",
+    "category": "LAUNDRY",
+    "cost_type": "VARIABLE",
+    "amount": 120000,
+    "memo": "[개발용 더미] 2025-12 LAUNDRY"
+  },
+  {
+    "expense_date": "2025-12-05",
+    "category": "ELECTRICITY",
+    "cost_type": "VARIABLE",
+    "amount": 186000,
+    "memo": "[개발용 더미] 2025-12 ELECTRICITY"
+  },
+  {
+    "expense_date": "2025-12-05",
+    "category": "SUPPLIES",
+    "cost_type": "VARIABLE",
+    "amount": 80000,
+    "memo": "[개발용 더미] 2025-12 SUPPLIES"
+  },
+  {
+    "expense_date": "2026-01-05",
+    "category": "RENT",
+    "cost_type": "FIXED",
+    "amount": 1200000,
+    "memo": "[개발용 더미] 2026-01 RENT"
+  },
+  {
+    "expense_date": "2026-01-05",
+    "category": "MANAGEMENT_FEE",
+    "cost_type": "FIXED",
+    "amount": 150000,
+    "memo": "[개발용 더미] 2026-01 MANAGEMENT_FEE"
+  },
+  {
+    "expense_date": "2026-01-05",
+    "category": "CLEANING",
+    "cost_type": "VARIABLE",
+    "amount": 360000,
+    "memo": "[개발용 더미] 2026-01 CLEANING"
+  },
+  {
+    "expense_date": "2026-01-05",
+    "category": "LAUNDRY",
+    "cost_type": "VARIABLE",
+    "amount": 120000,
+    "memo": "[개발용 더미] 2026-01 LAUNDRY"
+  },
+  {
+    "expense_date": "2026-01-05",
+    "category": "ELECTRICITY",
+    "cost_type": "VARIABLE",
+    "amount": 188000,
+    "memo": "[개발용 더미] 2026-01 ELECTRICITY"
+  },
+  {
+    "expense_date": "2026-01-05",
+    "category": "SUPPLIES",
+    "cost_type": "VARIABLE",
+    "amount": 80000,
+    "memo": "[개발용 더미] 2026-01 SUPPLIES"
+  },
+  {
+    "expense_date": "2026-02-05",
+    "category": "RENT",
+    "cost_type": "FIXED",
+    "amount": 1200000,
+    "memo": "[개발용 더미] 2026-02 RENT"
+  },
+  {
+    "expense_date": "2026-02-05",
+    "category": "MANAGEMENT_FEE",
+    "cost_type": "FIXED",
+    "amount": 150000,
+    "memo": "[개발용 더미] 2026-02 MANAGEMENT_FEE"
+  },
+  {
+    "expense_date": "2026-02-05",
+    "category": "CLEANING",
+    "cost_type": "VARIABLE",
+    "amount": 360000,
+    "memo": "[개발용 더미] 2026-02 CLEANING"
+  },
+  {
+    "expense_date": "2026-02-05",
+    "category": "LAUNDRY",
+    "cost_type": "VARIABLE",
+    "amount": 120000,
+    "memo": "[개발용 더미] 2026-02 LAUNDRY"
+  },
+  {
+    "expense_date": "2026-02-05",
+    "category": "ELECTRICITY",
+    "cost_type": "VARIABLE",
+    "amount": 190000,
+    "memo": "[개발용 더미] 2026-02 ELECTRICITY"
+  },
+  {
+    "expense_date": "2026-02-05",
+    "category": "SUPPLIES",
+    "cost_type": "VARIABLE",
+    "amount": 80000,
+    "memo": "[개발용 더미] 2026-02 SUPPLIES"
+  },
+  {
+    "expense_date": "2026-03-05",
+    "category": "RENT",
+    "cost_type": "FIXED",
+    "amount": 1200000,
+    "memo": "[개발용 더미] 2026-03 RENT"
+  },
+  {
+    "expense_date": "2026-03-05",
+    "category": "MANAGEMENT_FEE",
+    "cost_type": "FIXED",
+    "amount": 150000,
+    "memo": "[개발용 더미] 2026-03 MANAGEMENT_FEE"
+  },
+  {
+    "expense_date": "2026-03-05",
+    "category": "CLEANING",
+    "cost_type": "VARIABLE",
+    "amount": 360000,
+    "memo": "[개발용 더미] 2026-03 CLEANING"
+  },
+  {
+    "expense_date": "2026-03-05",
+    "category": "LAUNDRY",
+    "cost_type": "VARIABLE",
+    "amount": 120000,
+    "memo": "[개발용 더미] 2026-03 LAUNDRY"
+  },
+  {
+    "expense_date": "2026-03-05",
+    "category": "ELECTRICITY",
+    "cost_type": "VARIABLE",
+    "amount": 192000,
+    "memo": "[개발용 더미] 2026-03 ELECTRICITY"
+  },
+  {
+    "expense_date": "2026-03-05",
+    "category": "SUPPLIES",
+    "cost_type": "VARIABLE",
+    "amount": 80000,
+    "memo": "[개발용 더미] 2026-03 SUPPLIES"
+  },
+  {
+    "expense_date": "2026-04-05",
+    "category": "RENT",
+    "cost_type": "FIXED",
+    "amount": 1200000,
+    "memo": "[개발용 더미] 2026-04 RENT"
+  },
+  {
+    "expense_date": "2026-04-05",
+    "category": "MANAGEMENT_FEE",
+    "cost_type": "FIXED",
+    "amount": 150000,
+    "memo": "[개발용 더미] 2026-04 MANAGEMENT_FEE"
+  },
+  {
+    "expense_date": "2026-04-05",
+    "category": "CLEANING",
+    "cost_type": "VARIABLE",
+    "amount": 360000,
+    "memo": "[개발용 더미] 2026-04 CLEANING"
+  },
+  {
+    "expense_date": "2026-04-05",
+    "category": "LAUNDRY",
+    "cost_type": "VARIABLE",
+    "amount": 120000,
+    "memo": "[개발용 더미] 2026-04 LAUNDRY"
+  },
+  {
+    "expense_date": "2026-04-05",
+    "category": "ELECTRICITY",
+    "cost_type": "VARIABLE",
+    "amount": 194000,
+    "memo": "[개발용 더미] 2026-04 ELECTRICITY"
+  },
+  {
+    "expense_date": "2026-04-05",
+    "category": "SUPPLIES",
+    "cost_type": "VARIABLE",
+    "amount": 80000,
+    "memo": "[개발용 더미] 2026-04 SUPPLIES"
+  },
+  {
+    "expense_date": "2026-05-05",
+    "category": "RENT",
+    "cost_type": "FIXED",
+    "amount": 1200000,
+    "memo": "[개발용 더미] 2026-05 RENT"
+  },
+  {
+    "expense_date": "2026-05-05",
+    "category": "MANAGEMENT_FEE",
+    "cost_type": "FIXED",
+    "amount": 150000,
+    "memo": "[개발용 더미] 2026-05 MANAGEMENT_FEE"
+  },
+  {
+    "expense_date": "2026-05-05",
+    "category": "CLEANING",
+    "cost_type": "VARIABLE",
+    "amount": 360000,
+    "memo": "[개발용 더미] 2026-05 CLEANING"
+  },
+  {
+    "expense_date": "2026-05-05",
+    "category": "LAUNDRY",
+    "cost_type": "VARIABLE",
+    "amount": 120000,
+    "memo": "[개발용 더미] 2026-05 LAUNDRY"
+  },
+  {
+    "expense_date": "2026-05-05",
+    "category": "ELECTRICITY",
+    "cost_type": "VARIABLE",
+    "amount": 196000,
+    "memo": "[개발용 더미] 2026-05 ELECTRICITY"
+  },
+  {
+    "expense_date": "2026-05-05",
+    "category": "SUPPLIES",
+    "cost_type": "VARIABLE",
+    "amount": 80000,
+    "memo": "[개발용 더미] 2026-05 SUPPLIES"
+  },
+  {
+    "expense_date": "2026-06-05",
+    "category": "RENT",
+    "cost_type": "FIXED",
+    "amount": 1200000,
+    "memo": "[개발용 더미] 2026-06 RENT"
+  },
+  {
+    "expense_date": "2026-06-05",
+    "category": "MANAGEMENT_FEE",
+    "cost_type": "FIXED",
+    "amount": 150000,
+    "memo": "[개발용 더미] 2026-06 MANAGEMENT_FEE"
+  },
+  {
+    "expense_date": "2026-06-05",
+    "category": "CLEANING",
+    "cost_type": "VARIABLE",
+    "amount": 360000,
+    "memo": "[개발용 더미] 2026-06 CLEANING"
+  },
+  {
+    "expense_date": "2026-06-05",
+    "category": "LAUNDRY",
+    "cost_type": "VARIABLE",
+    "amount": 120000,
+    "memo": "[개발용 더미] 2026-06 LAUNDRY"
+  },
+  {
+    "expense_date": "2026-06-05",
+    "category": "ELECTRICITY",
+    "cost_type": "VARIABLE",
+    "amount": 198000,
+    "memo": "[개발용 더미] 2026-06 ELECTRICITY"
+  },
+  {
+    "expense_date": "2026-06-05",
+    "category": "SUPPLIES",
+    "cost_type": "VARIABLE",
+    "amount": 80000,
+    "memo": "[개발용 더미] 2026-06 SUPPLIES"
+  },
+  {
+    "expense_date": "2026-07-05",
+    "category": "RENT",
+    "cost_type": "FIXED",
+    "amount": 1200000,
+    "memo": "[개발용 더미] 2026-07 RENT"
+  },
+  {
+    "expense_date": "2026-07-05",
+    "category": "MANAGEMENT_FEE",
+    "cost_type": "FIXED",
+    "amount": 150000,
+    "memo": "[개발용 더미] 2026-07 MANAGEMENT_FEE"
+  },
+  {
+    "expense_date": "2026-07-05",
+    "category": "CLEANING",
+    "cost_type": "VARIABLE",
+    "amount": 360000,
+    "memo": "[개발용 더미] 2026-07 CLEANING"
+  },
+  {
+    "expense_date": "2026-07-05",
+    "category": "LAUNDRY",
+    "cost_type": "VARIABLE",
+    "amount": 120000,
+    "memo": "[개발용 더미] 2026-07 LAUNDRY"
+  },
+  {
+    "expense_date": "2026-07-05",
+    "category": "ELECTRICITY",
+    "cost_type": "VARIABLE",
+    "amount": 200000,
+    "memo": "[개발용 더미] 2026-07 ELECTRICITY"
+  },
+  {
+    "expense_date": "2026-07-05",
+    "category": "SUPPLIES",
+    "cost_type": "VARIABLE",
+    "amount": 80000,
+    "memo": "[개발용 더미] 2026-07 SUPPLIES"
+  },
+  {
+    "expense_date": "2026-08-05",
+    "category": "RENT",
+    "cost_type": "FIXED",
+    "amount": 1200000,
+    "memo": "[개발용 더미] 2026-08 RENT"
+  },
+  {
+    "expense_date": "2026-08-05",
+    "category": "MANAGEMENT_FEE",
+    "cost_type": "FIXED",
+    "amount": 150000,
+    "memo": "[개발용 더미] 2026-08 MANAGEMENT_FEE"
+  },
+  {
+    "expense_date": "2026-08-05",
+    "category": "CLEANING",
+    "cost_type": "VARIABLE",
+    "amount": 360000,
+    "memo": "[개발용 더미] 2026-08 CLEANING"
+  },
+  {
+    "expense_date": "2026-08-05",
+    "category": "LAUNDRY",
+    "cost_type": "VARIABLE",
+    "amount": 120000,
+    "memo": "[개발용 더미] 2026-08 LAUNDRY"
+  },
+  {
+    "expense_date": "2026-08-05",
+    "category": "ELECTRICITY",
+    "cost_type": "VARIABLE",
+    "amount": 202000,
+    "memo": "[개발용 더미] 2026-08 ELECTRICITY"
+  },
+  {
+    "expense_date": "2026-08-05",
+    "category": "SUPPLIES",
+    "cost_type": "VARIABLE",
+    "amount": 80000,
+    "memo": "[개발용 더미] 2026-08 SUPPLIES"
+  },
+  {
+    "expense_date": "2026-09-05",
+    "category": "RENT",
+    "cost_type": "FIXED",
+    "amount": 1200000,
+    "memo": "[개발용 더미] 2026-09 RENT"
+  },
+  {
+    "expense_date": "2026-09-05",
+    "category": "MANAGEMENT_FEE",
+    "cost_type": "FIXED",
+    "amount": 150000,
+    "memo": "[개발용 더미] 2026-09 MANAGEMENT_FEE"
+  },
+  {
+    "expense_date": "2026-09-05",
+    "category": "CLEANING",
+    "cost_type": "VARIABLE",
+    "amount": 360000,
+    "memo": "[개발용 더미] 2026-09 CLEANING"
+  },
+  {
+    "expense_date": "2026-09-05",
+    "category": "LAUNDRY",
+    "cost_type": "VARIABLE",
+    "amount": 120000,
+    "memo": "[개발용 더미] 2026-09 LAUNDRY"
+  },
+  {
+    "expense_date": "2026-09-05",
+    "category": "ELECTRICITY",
+    "cost_type": "VARIABLE",
+    "amount": 204000,
+    "memo": "[개발용 더미] 2026-09 ELECTRICITY"
+  },
+  {
+    "expense_date": "2026-09-05",
+    "category": "SUPPLIES",
+    "cost_type": "VARIABLE",
+    "amount": 80000,
+    "memo": "[개발용 더미] 2026-09 SUPPLIES"
+  }
+]
