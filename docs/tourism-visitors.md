@@ -1,65 +1,68 @@
-# Phase 9 — source-gated visitor foundation
+# Phase 9B official daily regional visitor trends
 
-**LIVE VISITOR PROVIDER NOT VERIFIED. Monthly visitor feature is NOT COMPLETE.**
+Phase 9A decision B remains authoritative: only the official daily source is verified. **No official monthly visitor count is produced.** Owner dashboard-v1 and MOIS license-market-v1 remain separate and unchanged.
 
-The source-discovery exception in the Phase 9 request limits this change to a provider interface, normalized internal contract, tests, configuration placeholder and source documentation. See [verified facts and blockers](tourism-visitor-source.md). No visitor DB table, sync command, HTTP endpoint or market UI is claimed to exist.
+## Source and categories
 
-## Pre-implementation inspection
+KTO dataset 15101972, locgoRegnVisitrDDList only. See [source evidence](tourism-visitor-source.md) and [Phase 9A verification](tourism-visitor-contract-verification.md). Categories remain 1 현지인(a), 2 외지인(b), 3 외국인(c). There is no TOTAL or category addition. The UI defaults to 외지인(b); residents are never relabeled outside visitors or guests.
 
-Started with clean main at 3bb4da4. Phase 8 had been committed separately at 59e9584 on phase8/staging-deployment. Existing phase9/tourism-visitors also pointed to 3bb4da4; switched to it and fast-forwarded to 59e9584 without creating a commit. No reset/stash/clean/revert, user work deletion or push.
+The immutable 16-code mapping in app/providers/visitor_api.py resolves exact Busan district identities against app.regions, verifies exactly 16 records, and never embeds environment-specific UUIDs. Changed/unrecognized Busan codes/names fail validation. Historical geography/methodology comparability beyond this window is not claimed.
 
-Current market: MOIS provider → LicenseRecord/ProviderBatch → public_sync service → market repository → app public tables. HTTP reads stored data only. Source-keyed lock, transaction-local ingestion role, atomic publish, safe failure audit and last-good preservation are reusable patterns; accommodation-specific date/closure rules must not be copied blindly.
+## Storage and permissions
 
-Current Alembic file head: 0006_postgis_availability. Actual local application DB at inspection: 0005_property_region_write. No migration created/applied in this phase. A future verified storage model will require an additive migration after 0006; no speculative columns, constraints or grants are added now.
+Alembic 0007_tourism_visitor_daily follows 0006_postgis_availability. Shared app.tourism_visitor_daily stores source/dataset, mapped region, source code/name, category code/name, reference date, unscaled NUMERIC value, weekday fields and UTC collected/created/updated timestamps. Unique(source, source_region_code, visitor_category_code, reference_date) makes revisions idempotent. No mobility traces/device IDs/personal coordinates/raw payloads.
 
-Region stores internal UUID, sido_name, sigungu_name and SIGUNGU for 16 Busan districts. Property selection is explicit and nullable. Source codes need independent mapping. public_data_sync_runs has source and generic status/counts but also accommodation-specific closure/reference fields: future visitor runs should reuse it with a distinct source and separately reviewed coverage metadata, not overwrite MOIS runs.
+Runtime has SELECT only; the existing ingestion role has SELECT/INSERT/UPDATE, no DELETE and no owner-table rights. Existing tenant RLS is unchanged. Add nullable visitor_coverage JSONB to public_data_sync_runs; source KTO_DATALAB_VISITORS_DAILY isolates visitor runs from MOIS. Closure metadata remains its existing false default and has no visitor meaning. Visitor coverage is never stored in closure fields.
 
-The protected Next.js market page uses serverApi.accommodationMarket → /api/v1/market/accommodations. FastAPI verifies signed JWT, membership, restricted-role context and organization-scoped property access. Those paths, dashboard-v1, license-market-v1, existing source labels and all Phase 8 files remain unchanged.
+A missing provider observation creates no numeric row. If a previously observed key disappears from a successfully fetched date, its value becomes null (withdrawn/unavailable), preserving identity/audit timestamps and suppressing calculations. This prevents stale values from silently completing windows. Explicit zero remains numeric zero. Parser failures roll back publication; they do not turn existing observations into missing values.
 
-## Internal code and tests
+## Collection
 
-backend/app/providers/tourism_visitors.py provides DailyVisitorObservation, VisitorProvider and UnverifiedVisitorProvider. It has no HTTP or DB access. The placeholder always raises LIVE_VISITOR_PROVIDER_NOT_VERIFIED, even with a configured key; it cannot be enabled accidentally through configuration.
+The command validates dates before calls, uses one calendar day per request window, size 1000, at most 10 pages/day, a 4 MiB response limit, 20-second request timeout, up to three attempts for transient HTTP/network failure and at most 450 HTTP attempts per invocation. Percent-encoded keys are decoded once then encoded with the request query, matching Phase 9A; key/URL/raw error output is forbidden. XML or top-level provider error responses fail safely. HTTP 200 alone is insufficient.
 
-The immutable daily DTO preserves exact Decimal/null, separate source geography/category strings, reference day, estimated terminology, optional methodology version/source-update timestamp and aware collection time. It rejects floats, negative/nonfinite values, false actual-count claims, unsupported scope, monthly relabeling and unexpected ownership fields. Unknown provider metadata stays null. Source region/category strings are deliberately opaque; accepting a DTO does not certify a production mapping.
+All nationwide rows are checked for types, valid dates, nonnegative exact decimal strings, categories, duplicate identities, weekday/date agreement and pagination consistency; only the 16 verified Busan codes are published. Missing Busan pairs in an otherwise valid complete page sequence are audited as missing, not guessed or padded. No stable upstream snapshot token exists: total changes and duplicate/page corruption are detected, but same-count concurrent revisions cannot be guaranteed absent.
 
-Tests contain clearly labeled internal TEST identifiers and arithmetic boundary inputs based on documented daily semantics. They are NOT real API responses, real Busan visitor values or provider-contract verification fixtures. No fixture loader, startup seed, monthly aggregation, MoM/YoY or live fallback exists. Tests stay under backend/tests and are excluded from Dockerfile.prod.
+Discovery starts at Seoul yesterday, walks backwards up to TOURISM_VISITOR_LOOKBACK_DAYS (default 60, allowed 1–120), and stops at the newest date with Busan observations. This is the latest available observed date, not an official completion guarantee. If none exists, record failure and preserve last-good data. Partial category coverage does not make a day officially complete.
 
-## Pending implementation after gate passes
+Bootstrap fetches 120 calendar days ending at the discovered date. Normal refresh uses TOURISM_VISITOR_REFRESH_DAYS (default 35, allowed 1–120). Both recheck empty discovery dates to invalidate withdrawn observations where relevant. These windows are Stay Insight operational choices, not official revision/lag guarantees. Revisions older than the refresh window require an explicitly run bootstrap; no automatic multi-year history fetch.
 
-Only after the source contract is resolved: exact storage/unique key and minimum ingestion grants; dataset-specific lock; idempotent revision-aware sync/audit; bounded HTTP/page handling; property-authorized read endpoint; monthly comparisons and chart/table. Missing month remains null; denominator <=0 or incompatible methodology/scope suppresses comparison. Latest month means latest provided complete period, not today. Staleness must follow verified publication cadence, not MOIS's seven-day rule.
+A visitor-specific transaction advisory lock prevents concurrent visitor publication and does not block the MOIS lock. One transaction holds that lock while fetching/validating and then publishing; this is a deliberate simple local MVP design, with a bounded but potentially long transaction. A committed RUNNING audit precedes it. Failure records safe FAILED status in a fresh transaction and returns nonzero; pre-DB failure has safe command output only. A competing job records VISITOR_ALREADY_RUNNING and exits nonzero. Abrupt process termination can leave RUNNING audit; automatic recovery is not implemented. No scheduler was added or changed.
 
-Visitor statistics are not accommodation reservations, guests, occupied rooms, competitor revenue or accommodation demand. They do not enter owner KPIs, causal analyses, rankings or scores.
+visitor_coverage records attempted start/end, latest observed date, per-date missing code:category pairs, missing_pair_count and APPLICATION_COVERAGE_ONLY. Discovery dates after the latest observation may legitimately all be missing; distinguish those from gaps inside the bootstrap history.
 
-## Local manual support
+## Derived metrics and missing data
 
-Use localhost:3000 and backend localhost:18000; Swagger localhost:18000/docs. Existing Docker contracts are unchanged. No frontend source edit means no frontend rebuild is needed for this foundation.
+GET /api/v1/market/visitors requires authenticated organization membership and scoped property ownership before local public-table reads. Parameters: property_id required; category 1/2/3 default 2; days 1–120 default 90. No external calls occur during HTTP requests.
 
-| Requested check | What is actually available now |
-| --- | --- |
-| Environment | No new required variable. backend/.env.example contains commented reserved TOURISM_VISITOR_API_KEY only; not read or wired into Compose |
-| Visitor sync command | None implemented: do not run a guessed app.jobs.sync_tourism_visitors command |
-| Sync status | No visitor run can be created; existing MOIS history unchanged |
-| Visitor row count | No visitor table; absence is not an observed count of zero |
-| Available periods/latest region | Not available; no official observations stored |
-| Existing property | Open localhost:3000/properties, choose an existing property |
-| 지역 시장 | Follow 지역 시장; existing official accommodation information remains |
-| Visitor section | Not added under the discovery gate; no placeholder numbers/chart |
-| MoM/YoY | Not implemented until official monthly/comparability contract is verified |
-| Missing month | DTO null vs zero tested; monthly history/chart tests are deferred |
-| No region | Existing Phase 7 behavior unchanged; visitor behavior deferred |
-| Not synchronized | No visitor endpoint/state exists; do not mislabel provider-unverified as a completed integration waiting for sync |
-| Fixtures vs live | All new sample values are test-only; no live visitor data has been fetched |
+Each selected category/region uses its own latest non-null stored date. History contains every requested calendar day through that date, with null gaps. The latest category date can differ from another category. If no successful visitor data exists, available=false/NOT_SYNCHRONIZED. Without property region, PROPERTY_REGION_UNAVAILABLE and edit CTA; no Busan-wide fallback.
 
-Safe test command from the repository (no provider key/network calls):
+- average_7d: exactly seven consecutive observations ending on latest date, divided by seven.
+- average_28d: exactly 28 consecutive observations, never a monthly average.
+- previous_7d_average: immediately preceding seven dates.
+- change_7d_percent: (current minus previous) / previous * 100 only if both complete and previous > 0.
 
-~~~powershell
-.\.tools\docker-compose.exe exec -T backend uv run pytest tests/test_tourism_visitors.py -q
-~~~
+Decimal calculations use precision 80, display averages/percentages ROUND_HALF_UP to two decimals; API serializes Decimal strings. Percentage uses unrounded averages. Missing any required day suppresses the relevant average/comparison; never divide by fewer days. No same-weekday metric, category total, monthly sum or MoM/YoY visitor metric was added. API returns source/category/scope, history, coverage, selected latest date, last collection time, elapsed days and warnings. Unknown methodology version stays null.
 
-Read-only confirmation that no visitor table was created (expected blank/null):
+## UI
+
+Existing /properties/[id]/market adds a separate 공식 지역 방문 추이 section. The GET category form uses categories returned by the API and preserves the route. Cards show 최근 제공일, 일별 추정 방문자, 최근 7일 일평균, 최근 28일 일평균 and 직전 7일 대비. Recharts has connectNulls=false; an expandable accessible table contains exact strings and explicit 자료 없음. Number conversion is limited to chart plotting. No client business calculations.
+
+A source/methodology note says these are mobile-network based estimated daily indicators, not lodging guests, reservations or occupancy. Coverage is application coverage, not provider completeness. Publication lag remains unresolved: show latest date/collection time/days elapsed and an informational delay note, not MOIS's seven-day stale rule. Visitor API infrastructure failure has a separate error message while accommodation data remains visible; authorization/redirect errors still propagate.
+
+## Exact local commands
+
+From the repository root; use docker compose instead of .tools/docker-compose.exe if installed. Keep TOURISM_VISITOR_API_KEY in ignored root .env. Compose passes it only to backend; no frontend secret variable.
 
 ~~~powershell
-.\.tools\docker-compose.exe exec -T db psql -U postgres -d stay_insight -c "SELECT to_regclass('app.tourism_visitor_stats');"
+.\.tools\docker-compose.exe up -d db backend
+.\.tools\docker-compose.exe exec -T -e DATABASE_URL=postgresql+psycopg://postgres:postgres@db:5432/stay_insight backend uv run alembic upgrade head
+.\.tools\docker-compose.exe up -d --build --force-recreate backend frontend
+# One-time initial history:
+.\.tools\docker-compose.exe exec -T -e MARKET_DATABASE_URL=postgresql+psycopg://postgres:postgres@db:5432/stay_insight backend uv run python -m app.jobs.sync_tourism_visitors --bootstrap
+# Subsequent refresh:
+.\.tools\docker-compose.exe exec -T -e MARKET_DATABASE_URL=postgresql+psycopg://postgres:postgres@db:5432/stay_insight backend uv run python -m app.jobs.sync_tourism_visitors
 ~~~
 
-Do not edit existing demo rows, source timestamps or market data to simulate visitor scenarios. No cloud deploy, remote migration, Render Cron activation or local automation change is part of this phase.
+DB credentials above are existing LOCAL DEVELOPMENT defaults only, never hosted settings. Do not delete volumes. Frontend remains localhost:3000, API localhost:18000, internal backend:8000, Webpack development with existing polling workaround. Frontend source is image-copied and requires rebuild after edits. Production Dockerfile excludes tests/fixtures.
+
+Manual browser: login → 내 숙소 → a property with a Busan district → 지역 시장 → select each category and 조회 → inspect latest date, cards, chart, 일별 자료 표 보기, source and coverage. No owner business-data edits are required. [Actual verification and limitations](phase9b-verification.md). No deployment, Render Cron activation, events/maps/benchmark or Phase 10.

@@ -179,3 +179,7 @@ Head is now 0006_postgis_availability (local application database may remain at 
 ## Phase 9 gated foundation
 
 No visitor table, region mapping, grant or migration was added. File head remains 0006_postgis_availability; local application DB was not migrated. Future visitor persistence requires verified official period/code/value/uniqueness semantics and an additive migration. Existing public_data_sync_runs is the preferred audit structure, with MOIS records preserved. See [source gate](tourism-visitor-source.md).
+
+## Phase 9B implemented daily visitor storage
+
+Migration 0007_tourism_visitor_daily follows 0006. Adds app.tourism_visitor_daily with exact unscaled NUMERIC, reference day, region FK, source/category identity, weekday metadata and UTC timestamps. Unique(source,source_region_code,visitor_category_code,reference_date). Null marks a previously observed value withdrawn on a successful refresh; absence is never numeric zero. Adds nullable public_data_sync_runs.visitor_coverage JSONB for this dataset only. Runtime SELECT; ingestion SELECT/INSERT/UPDATE, no tenant grants. Previous migrations unchanged. [Storage and sync contract](tourism-visitors.md).

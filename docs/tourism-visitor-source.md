@@ -1,5 +1,7 @@
 # Tourism visitor source verification
 
+Phase 9B implements the verified daily-only adapter and application-level coverage policies described in [daily contract](tourism-visitors.md). The disabled-provider statements below are historical Phase 9A status. Publication guarantees, maximum upstream limits and revision horizon remain unresolved; no new official monthly evidence was introduced.
+
 ## Phase 9A live continuation — current result
 
 2026-09-30: **DECISION B: ONLY OFFICIAL DAILY SOURCE VERIFIED**. Private root .env key is now available and authenticated requests succeeded. This section supersedes the earlier blocked report below. The production provider remains disabled; no storage, sync, endpoint or UI was enabled.

@@ -1,3 +1,4 @@
+import type { VisitorMarket } from "./visitor-types";
 import type { AccommodationMarket } from "./market-types";
 import type { DashboardSummary, DashboardTrends } from "./dashboard-types";
 import type { Expense, ExpenseSummary } from "./expense-types";
@@ -32,6 +33,8 @@ async function request<T>(path: string, organizationId?: string): Promise<T> {
 }
 
 export const serverApi = {
+  visitorMarket: (org: string, property: string, category = "2") =>
+    request<VisitorMarket>("/api/v1/market/visitors?" + new URLSearchParams({ property_id: property, category, days: "90" }), org),
   accommodationMarket: (org: string, property: string) =>
     request<AccommodationMarket>("/api/v1/market/accommodations?" + new URLSearchParams({ property_id: property }), org),
   dashboardSummary: (org: string, property: string, month?: string) =>

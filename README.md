@@ -170,3 +170,7 @@ Repository preparation only; no live staging deployment is claimed. Follow [depl
 ## Phase 9 visitor source investigation
 
 **LIVE VISITOR PROVIDER NOT VERIFIED.** An official daily candidate is identified, but monthly publication/semantics and region mapping remain unresolved. Only internal contracts, a disabled provider and tests are added; no visitor sync command, data table, endpoint or chart yet. [Source evidence](docs/tourism-visitor-source.md) · [scope and local checks](docs/tourism-visitors.md). Existing Phase 8 preparation and local Docker behavior are preserved.
+
+## Phase 9B official daily visitor trends
+
+Daily visitor collection and market UI supersede the earlier Phase 9 foundation gate. Add backend-only TOURISM_VISITOR_API_KEY to ignored root .env, apply migration 0007, recreate backend and rebuild frontend. Run sync_tourism_visitors --bootstrap once; later omit the flag for a 35-day refresh. No scheduler or official monthly count. [Exact commands and contract](docs/tourism-visitors.md) · [verification](docs/phase9b-verification.md).

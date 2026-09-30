@@ -211,3 +211,10 @@ Operating profit is NOT implemented in Phase 4. See [expenses.md](expenses.md).
 ## Phase 9 source discovery boundary
 
 - ADR-049: The official KTO regional-visitor candidate exposes daily operations; an official monthly contract and Busan mapping are not yet verified. Follow the requested source gate: only a fail-closed provider interface/internal daily DTO, tests and documentation. No daily-to-monthly aggregation, speculative persistence, public endpoint or UI. See [source decision](tourism-visitor-source.md) and [implementation boundary](tourism-visitors.md). Existing Phase 1–8 contracts and files are preserved.
+
+## Phase 9B decisions
+
+- ADR-050: Phase 9A decision B authorizes only official daily estimates. Add a separate public visitor dataset and category-specific metrics; no monthly visitors, category totals or owner KPI mixing. See [daily contract](tourism-visitors.md).
+- ADR-051: One-day bounded collection, 60-day discovery, 120-day bootstrap and 35-day revision window. These are configurable operational policies, not provider guarantees. Separate transaction lock/audit source, atomic publication and null withdrawal markers preserve honest missingness and last-good data on failure.
+- ADR-052: Reuse shared regions by verified immutable source code → exact name → DB identity. No UUID hard-coding. Migration 0007 adds one table and nullable visitor coverage audit; read-only runtime/minimal ingestion grants preserve tenant RLS.
+- ADR-053: visitor-daily-v1 derives complete 7/28-day averages and adjacent 7-day change from exact Decimal values. Latest observed day is distinct from collection time/completion guarantee. Source/API/UI remain separate from license-market-v1/dashboard-v1.

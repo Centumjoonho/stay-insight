@@ -71,13 +71,14 @@ test("market renders stale and failure warnings without fabricating values", () 
 
 test("actual market page renders and propagates authorization/API errors; missing property is 404", async () => {
   let failure: unknown;
-  const api = { accommodationMarket: async (org: string, id: string) => {
+  const api = { visitorMarket: async () => null, accommodationMarket: async (org: string, id: string) => {
     assert.equal(org, "org"); assert.equal(id, "test-property");
     if (failure) throw failure; return fixture();
   }};
   const page = load("../src/app/(protected)/properties/[id]/market/page.tsx", {
     "@/lib/api/server": { requireOrganization: async () => ({ organization_id: "org" }), serverApi: api },
     "@/lib/api/transport": transport, "@/components/market-view": views,
+    "@/components/visitor-view": { VisitorView: () => null },
     "next/navigation": { notFound: () => { throw Error("NOT_FOUND"); } },
   }) as { default: (props: { params: Promise<{ id: string }> }) => Promise<ReactNode> };
   const props = { params: Promise.resolve({ id: "test-property" }) };

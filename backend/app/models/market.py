@@ -56,4 +56,5 @@ class PublicDataSyncRun(Base):
     updated_count: Mapped[int] = mapped_column(default=0)
     unchanged_count: Mapped[int] = mapped_column(default=0)
     failed_count: Mapped[int] = mapped_column(default=0)
+    visitor_coverage: Mapped[dict[str, object] | None] = mapped_column(JSONB)
     error_summary: Mapped[str | None] = mapped_column(String(100))

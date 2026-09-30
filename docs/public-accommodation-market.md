@@ -140,3 +140,7 @@ docker compose run --rm --no-deps frontend pnpm test
 ## Phase 8 remote execution preparation
 
 [Staging operations](staging-operations.md) selects one Render Cron Job invoking the existing python module daily at 00:00 UTC (09:00 KST). It uses MARKET_DATABASE_URL with a separate restricted collector login and backend-only provider key. No scheduler was deployed or successful remote run claimed. The local automation remains unchanged pending remote verification; never aim both at the same staging DB. license-market-v1, locking, atomic publication and source/freshness semantics are unchanged.
+
+## Phase 9B adjacent daily visitor context
+
+The same market page now includes a separate KTO daily visitor section. Existing MOIS source, metrics, sync and freshness rules remain unchanged. Visitor categories are separate, with their own timestamps and coverage; the MOIS stale rule does not apply. [Visitor contract](tourism-visitors.md).

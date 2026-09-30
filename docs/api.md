@@ -169,3 +169,7 @@ semantics stay license-market-v1. See [region behavior](property-region.md).
 ## Phase 9 source gate
 
 No visitor HTTP endpoint is registered. /api/v1/market/visitors is a proposed name only, not an available route. No page-load external visitor calls or changes to accommodation responses. Source verification must precede persistence/read API/UI implementation; see [visitor status](tourism-visitors.md).
+
+## Phase 9B daily visitors (supersedes Phase 9 source gate above)
+
+GET /api/v1/market/visitors?property_id=UUID&category=2&days=90 is implemented. Authenticated membership and tenant-scoped property access are mandatory; cross-tenant property 404, invalid category or days outside 1–120 returns 422. category 1/2/3 only, default 2. Response includes available/reason, scope, selected category and official categories, latest date/value, rolling averages/change, daily gap-preserving history, source and coverage. Decimal values are JSON strings, missing values null. PROPERTY_REGION_UNAVAILABLE and NOT_SYNCHRONIZED are unavailable states, not zero. No upstream API calls during requests. See [full daily contract](tourism-visitors.md).
