@@ -183,3 +183,7 @@ No visitor table, region mapping, grant or migration was added. File head remain
 ## Phase 9B implemented daily visitor storage
 
 Migration 0007_tourism_visitor_daily follows 0006. Adds app.tourism_visitor_daily with exact unscaled NUMERIC, reference day, region FK, source/category identity, weekday metadata and UTC timestamps. Unique(source,source_region_code,visitor_category_code,reference_date). Null marks a previously observed value withdrawn on a successful refresh; absence is never numeric zero. Adds nullable public_data_sync_runs.visitor_coverage JSONB for this dataset only. Runtime SELECT; ingestion SELECT/INSERT/UPDATE, no tenant grants. Previous migrations unchanged. [Storage and sync contract](tourism-visitors.md).
+
+## Phase 10B event persistence
+
+Additive 0008_tourism_events follows 0007. app.tourism_events stores source+contentid unique identity, exact existing region FK, new legal-dong source codes, title/start/end DATE, nullable address/raw source status and UTC observation/audit timestamps. Date/source/code constraints and (region_id,start_date) index. Runtime SELECT; ingestion SELECT/INSERT/UPDATE, no DELETE. public_data_sync_runs adds nullable event_coverage JSONB; no owner table or old migration changes. [Event lifecycle and query contract](events.md).

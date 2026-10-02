@@ -5,9 +5,11 @@ from uuid import UUID
 from fastapi import APIRouter, Query
 
 from app.api.dependencies.tenant import Database, OrganizationContext
+from app.schemas.events import EventMarket
 from app.schemas.market import AccommodationMarket
 from app.schemas.visitors import VisitorMarket
 from app.services import market as service
+from app.services.events import events as event_service
 from app.services.visitors import visitors as visitor_service
 
 router = APIRouter(prefix="/market", tags=["market"])
@@ -29,3 +31,15 @@ def visitors(
     days: Annotated[int, Query(ge=1, le=120)] = 90,
 ) -> VisitorMarket:
     return visitor_service(db, org, property_id, category, days)
+
+
+@router.get("/events", response_model=EventMarket)
+def events(
+    db: Database,
+    org: OrganizationContext,
+    property_id: UUID,
+    from_date: date | None = None,
+    to_date: date | None = None,
+    limit: Annotated[int, Query(ge=1, le=100)] = 50,
+) -> EventMarket:
+    return event_service(db, org, property_id, from_date, to_date, limit)

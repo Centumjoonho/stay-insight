@@ -174,3 +174,11 @@ Repository preparation only; no live staging deployment is claimed. Follow [depl
 ## Phase 9B official daily visitor trends
 
 Daily visitor collection and market UI supersede the earlier Phase 9 foundation gate. Add backend-only TOURISM_VISITOR_API_KEY to ignored root .env, apply migration 0007, recreate backend and rebuild frontend. Run sync_tourism_visitors --bootstrap once; later omit the flag for a 35-day refresh. No scheduler or official monthly count. [Exact commands and contract](docs/tourism-visitors.md) · [verification](docs/phase9b-verification.md).
+
+## Phase 10 event source gate
+
+**LIVE EVENT PROVIDER NOT VERIFIED.** Official event catalogue/Swagger inspected; approved live access and response/geography verification remain pending. No event table, command, API or UI yet. [Source evidence](docs/event-source.md) · [resume boundary](docs/events.md) · [verification](docs/phase10-verification.md).
+
+## Phase 10B implemented event context
+
+Official KTO events now have separate storage, manual sync and a property-authorized market section using new legal-dong geography. [Contract and commands](docs/events.md) · [verification](docs/phase10b-verification.md). This supersedes the earlier Phase 10 source gate. Private TOURISM_EVENT_API_KEY stays separate from visitor credentials. No scheduler/cloud deployment/maps.

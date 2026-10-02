@@ -69,8 +69,8 @@ test("chart passes calendar gaps unchanged and explicitly disables interpolation
 test("market page sends selected category and preserves accommodation on visitor outage",async()=>{
  let fail=false; let selected="";
  const page=load("../src/app/(protected)/properties/[id]/market/page.tsx",{
- "@/lib/api/server":{requireOrganization:async()=>({organization_id:"org"}),serverApi:{accommodationMarket:async()=>({}),visitorMarket:async(org:string,id:string,cat:string)=>{assert.equal(org,"org");assert.equal(id,"test-property");selected=cat;if(fail)throw new transport.ApiError(503,"offline");return fixture();}}},
- "@/lib/api/transport":transport,"@/components/market-view":{MarketView:()=>createElement("p",null,"EXISTING ACCOMMODATION")},"@/components/visitor-view":views,
+ "@/lib/api/server":{requireOrganization:async()=>({organization_id:"org"}),serverApi:{eventMarket:async()=>null,accommodationMarket:async()=>({}),visitorMarket:async(org:string,id:string,cat:string)=>{assert.equal(org,"org");assert.equal(id,"test-property");selected=cat;if(fail)throw new transport.ApiError(503,"offline");return fixture();}}},
+ "@/lib/api/transport":transport,"@/components/market-view":{MarketView:()=>createElement("p",null,"EXISTING ACCOMMODATION")},"@/components/event-view":{EventView:()=>null},"@/components/visitor-view":views,
  "next/navigation":{notFound:()=>{throw Error("NOT_FOUND");}},
  }) as {default:(p:{params:Promise<{id:string}>;searchParams:Promise<{category:string}>})=>Promise<ReactNode>};
  const props={params:Promise.resolve({id:"test-property"}),searchParams:Promise.resolve({category:"3"})};

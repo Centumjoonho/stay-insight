@@ -218,3 +218,13 @@ Operating profit is NOT implemented in Phase 4. See [expenses.md](expenses.md).
 - ADR-051: One-day bounded collection, 60-day discovery, 120-day bootstrap and 35-day revision window. These are configurable operational policies, not provider guarantees. Separate transaction lock/audit source, atomic publication and null withdrawal markers preserve honest missingness and last-good data on failure.
 - ADR-052: Reuse shared regions by verified immutable source code → exact name → DB identity. No UUID hard-coding. Migration 0007 adds one table and nullable visitor coverage audit; read-only runtime/minimal ingestion grants preserve tenant RLS.
 - ADR-053: visitor-daily-v1 derives complete 7/28-day averages and adjacent 7-day change from exact Decimal values. Latest observed day is distinct from collection time/completion guarantee. Source/API/UI remain separate from license-market-v1/dashboard-v1.
+
+## Phase 10 source gate
+
+- ADR-054: Require live event wire/geography evidence before persistence or production provider implementation. The KTO 15101578 official Swagger documents searchFestival2 and ldongCode2 while legacy region parameters are deprecated; no speculative code mapping or reuse of visitor credentials. Until approved event access and bounded probes succeed, Phase 10 is documentation-only. See [source evidence](event-source.md) and [resume boundary](events.md). Existing metrics, grants, migrations, market sections and deployment configuration remain unchanged.
+
+## Phase 10B decisions
+
+- ADR-055: Verified KorService2 legal-dong codes resolve to existing Busan regions by exact name. Separate tourism_events identity is source+contentid; preserve optional address/raw status only. Omit unverified detail URLs, coordinates, category labels and timestamp normalization; no media.
+- ADR-056: Migration 0008 adds events and nullable event_coverage audit. Separate dataset lock, runtime SELECT/minimal ingestion grants, atomic publication, no missing-row deletion and no owner metric changes. Initial bounded pagination uses observed size 2; unverified provider-wide empty shape fails closed rather than inventing a contract.
+- ADR-057: Stored-data property-authorized event reads distinguish no region, no sync, outside collection window and valid empty. Inclusive overlap, date-only temporal status, deterministic ordering, counts independent of result limit and source/impact warnings. No event scheduler or Phase 11. See [event contract](events.md).

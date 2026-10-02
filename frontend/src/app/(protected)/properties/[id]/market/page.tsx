@@ -1,3 +1,4 @@
+import { EventView } from "@/components/event-view";
 import { VisitorView } from "@/components/visitor-view";
 import { notFound } from "next/navigation";
 import { requireOrganization, serverApi } from "@/lib/api/server";
@@ -23,5 +24,11 @@ export default async function Market({ params, searchParams }: { params: Promise
   } catch (error) {
     if (!(error instanceof ApiError) || error.status < 500) throw error;
   }
-  return <><MarketView data={data} /><VisitorView data={visitors} error={!visitors} /></>;
+  let events = null;
+  try {
+    events = await serverApi.eventMarket(org.organization_id, id);
+  } catch (error) {
+    if (!(error instanceof ApiError) || error.status < 500) throw error;
+  }
+  return <><MarketView data={data} /><VisitorView data={visitors} error={!visitors} /><EventView data={events} /></>;
 }

@@ -32,5 +32,6 @@ def test_database_configuration_without_connection() -> None:
         "app.public_accommodation_licenses",
         "app.public_data_sync_runs",
         "app.tourism_visitor_daily",
+        "app.tourism_events",
     }
     engine.dispose()

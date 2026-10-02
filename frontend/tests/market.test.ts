@@ -71,14 +71,14 @@ test("market renders stale and failure warnings without fabricating values", () 
 
 test("actual market page renders and propagates authorization/API errors; missing property is 404", async () => {
   let failure: unknown;
-  const api = { visitorMarket: async () => null, accommodationMarket: async (org: string, id: string) => {
+  const api = { eventMarket: async () => null, visitorMarket: async () => null, accommodationMarket: async (org: string, id: string) => {
     assert.equal(org, "org"); assert.equal(id, "test-property");
     if (failure) throw failure; return fixture();
   }};
   const page = load("../src/app/(protected)/properties/[id]/market/page.tsx", {
     "@/lib/api/server": { requireOrganization: async () => ({ organization_id: "org" }), serverApi: api },
     "@/lib/api/transport": transport, "@/components/market-view": views,
-    "@/components/visitor-view": { VisitorView: () => null },
+    "@/components/event-view":{EventView:()=>null},"@/components/visitor-view": { VisitorView: () => null },
     "next/navigation": { notFound: () => { throw Error("NOT_FOUND"); } },
   }) as { default: (props: { params: Promise<{ id: string }> }) => Promise<ReactNode> };
   const props = { params: Promise.resolve({ id: "test-property" }) };
@@ -96,7 +96,7 @@ test("actual property navigation adds market and retains existing workflows", as
     "next/link": links, "next/navigation": { notFound: () => { throw Error("not found"); } },
     "@/lib/api/transport": transport,
     "@/lib/api/server": { requireOrganization: async () => ({ organization_id: "org" }),
-      serverApi: { property: async () => ({ name: "TEST ONLY", address: "test", inventory_units: 1 }) } },
+      serverApi: { eventMarket: async () => null, property: async () => ({ name: "TEST ONLY", address: "test", inventory_units: 1 }) } },
   }) as { default: (props: { params: Promise<{ id: string }> }) => Promise<ReactNode> };
   const html = renderToStaticMarkup(await page.default({ params: Promise.resolve({ id: "id" }) }));
   for (const label of ["지역 시장", "대시보드", "CSV 가져오기", "가져오기 기록", "예약 목록", "비용 관리"]) assert.ok(html.includes(label));

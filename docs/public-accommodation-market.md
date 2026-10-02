@@ -144,3 +144,7 @@ docker compose run --rm --no-deps frontend pnpm test
 ## Phase 9B adjacent daily visitor context
 
 The same market page now includes a separate KTO daily visitor section. Existing MOIS source, metrics, sync and freshness rules remain unchanged. Visitor categories are separate, with their own timestamps and coverage; the MOIS stale rule does not apply. [Visitor contract](tourism-visitors.md).
+
+## Phase 10B adjacent event context
+
+The market page also displays an independent official KTO event section using stored legal-dong district associations. MOIS and visitor collection/metrics remain unchanged. Event schedules do not imply accommodation demand or revenue. [Event contract](events.md).

@@ -173,3 +173,7 @@ No visitor HTTP endpoint is registered. /api/v1/market/visitors is a proposed na
 ## Phase 9B daily visitors (supersedes Phase 9 source gate above)
 
 GET /api/v1/market/visitors?property_id=UUID&category=2&days=90 is implemented. Authenticated membership and tenant-scoped property access are mandatory; cross-tenant property 404, invalid category or days outside 1–120 returns 422. category 1/2/3 only, default 2. Response includes available/reason, scope, selected category and official categories, latest date/value, rolling averages/change, daily gap-preserving history, source and coverage. Decimal values are JSON strings, missing values null. PROPERTY_REGION_UNAVAILABLE and NOT_SYNCHRONIZED are unavailable states, not zero. No upstream API calls during requests. See [full daily contract](tourism-visitors.md).
+
+## Phase 10B events
+
+GET /api/v1/market/events: required property_id; optional from_date/to_date and limit 1–100. Default today through +90 days, max date difference180. JWT/membership/scoped-property checks precede shared event reads. Source metadata and coverage separate from owner/visitor data; no upstream calls during HTTP request. [Full response/state/sort contract](events.md).
