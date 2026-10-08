@@ -98,3 +98,10 @@ excludes CANCELLED. Both use check_in dates, known non-null fees and no syntheti
 Totals reconcile for the same effective dates when no cancelled fees are present; otherwise the
 difference is the cancelled reservations' fees. Also select the same dates when comparing a
 partial dashboard month with Phase 4's full-month default. Phase 4 remains unchanged.
+
+## Phase 11 version boundary
+
+All dashboard-v1 definitions above remain frozen. The main UI now uses a separately versioned
+[dashboard-v2](dashboard-v2.md), whose room-night denominators use explicit capacity history,
+sales exclusions and optional reservation room_units. Financial recognition and comparison
+rules remain the same. Do not retroactively reinterpret stored v1 results as v2.

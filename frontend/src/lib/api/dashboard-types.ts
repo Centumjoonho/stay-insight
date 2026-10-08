@@ -25,7 +25,7 @@ export interface MetricDelta {
 export interface DashboardMetadata {
   calculation_version: string; source: "owner"; revenue_source: "owner_csv"; expense_source: "MANUAL";
   financial_date_basis: "check_in"; operational_date_basis: "overlapping_nights"; allocation_method: string;
-  estimated_metrics: string[]; room_units_per_reservation: 1; inventory_basis: string; coverage: string; generated_at: string;
+  estimated_metrics: string[]; room_units_per_reservation?: 1; room_units_basis?: "reported_or_estimated_one"; inventory_basis: string; coverage: string; generated_at: string;
 }
 export interface DashboardSummary {
   property: { id: string; name: string; inventory_units: number };

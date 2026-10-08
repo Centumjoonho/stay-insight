@@ -182,3 +182,12 @@ Daily visitor collection and market UI supersede the earlier Phase 9 foundation 
 ## Phase 10B implemented event context
 
 Official KTO events now have separate storage, manual sync and a property-authorized market section using new legal-dong geography. [Contract and commands](docs/events.md) · [verification](docs/phase10b-verification.md). This supersedes the earlier Phase 10 source gate. Private TOURISM_EVENT_API_KEY stays separate from visitor credentials. No scheduler/cloud deployment/maps.
+
+## Phase 11 inventory availability and dashboard-v2
+
+Owner capacity history, date-level sales exclusions and optional CSV room_units are implemented.
+The main dashboard uses explicit v2; original v1 remains available and frozen.
+Apply additive migration 0009_inventory_availability locally, then rebuild frontend (image-copied
+source). No cloud deployment or public-data refresh is part of this phase.
+[Inventory usage](docs/inventory-availability.md) · [v2 calculations](docs/dashboard-v2.md) ·
+[Verification and commands](docs/phase11-verification.md).

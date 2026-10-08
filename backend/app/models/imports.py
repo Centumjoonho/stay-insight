@@ -102,6 +102,7 @@ class Reservation(Base):
         CheckConstraint(CHANNEL_CHECK),
         CheckConstraint("check_out > check_in AND booked_nights = check_out - check_in"),
         CheckConstraint("guest_count IS NULL OR guest_count >= 1"),
+        CheckConstraint("room_units IS NULL OR room_units > 0"),
         CheckConstraint("gross_revenue >= 0 AND gross_revenue <> 'NaN'::numeric"),
         CheckConstraint(
             "channel_fee IS NULL OR (channel_fee >= 0 AND channel_fee <= gross_revenue)"
@@ -125,6 +126,7 @@ class Reservation(Base):
     check_in: Mapped[date] = mapped_column(Date)
     check_out: Mapped[date] = mapped_column(Date)
     booked_nights: Mapped[int]
+    room_units: Mapped[int | None]
     guest_count: Mapped[int | None]
     gross_revenue: Mapped[Decimal] = mapped_column(Numeric(18, 0))
     channel_fee: Mapped[Decimal | None] = mapped_column(Numeric(18, 0))

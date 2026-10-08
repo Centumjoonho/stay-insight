@@ -29,7 +29,7 @@ export function DashboardView({ summary: s, trends }: { summary: DashboardSummar
       </form>
     </header>
     <nav aria-label="숙소 업무" className="flex flex-wrap gap-4 text-sm underline">
-      <Link href={root}>숙소 정보</Link><Link href={root + "/reservations"}>예약 목록</Link>
+      <Link href={root}>숙소 정보</Link><Link href={root + "/inventory"}>객실 운영</Link><Link href={root + "/reservations"}>예약 목록</Link>
       <Link href={root + "/imports/new"}>CSV 가져오기</Link><Link href={root + "/expenses"}>비용 관리</Link>
     </nav>
     {!hasReservations ? <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8">
@@ -48,10 +48,12 @@ export function DashboardView({ summary: s, trends }: { summary: DashboardSummar
       {hasReservations && <p>확인된 영업이익률: {percentage(f.known_operating_margin)} · 전월 대비 {comparisonText(s.comparisons.previous_month.metrics.known_operating_margin, "ratio")}</p>}
       <p>등록된 매출과 입력된 운영비를 기준으로 계산한 값이며, 세금·이자·감가상각 등 미등록 비용은 포함되지 않을 수 있습니다.</p>
       <p>매출·수수료는 체크인일 기준이며 취소 예약을 제외합니다. UNKNOWN 예약은 포함됩니다.</p>
-      <p>등록 객실 수와 달력 일수를 기준으로 계산한 점유율입니다. 판매중지·객실차단 일정은 아직 반영되지 않습니다.</p>
-      <p>예약 1건을 객실 1개로 가정한 추정치입니다. 실투숙 확인 자료는 없으며 현재 등록 객실 수를 과거 기간에도 적용합니다.</p>
+      {s.metadata.calculation_version === "dashboard-v2" ? <p>날짜별 객실 수 이력에서 판매 제외 객실을 차감합니다. 예약별 객실 수를 반영하며, 미입력 예약은 1객실로 추정합니다. 실투숙 확인 자료는 아닙니다.</p> : <>
+        <p>등록 객실 수와 달력 일수를 기준으로 계산한 점유율입니다. 판매중지·객실차단 일정은 아직 반영되지 않습니다.</p>
+        <p>예약 1건을 객실 1개로 가정한 추정치입니다. 실투숙 확인 자료는 없으며 현재 등록 객실 수를 과거 기간에도 적용합니다.</p>
+      </>}
       <p>ADR·RevPAR는 예약 매출을 숙박일수에 비례 배분한 추정치입니다. 체크아웃일은 제외합니다.</p>
-      {hasReservations && <p>기간 내 예약 객실박 (추정): {o.occupied_room_nights}박 / 달력 기준 가능 객실박: {o.available_room_nights}박</p>}
+      {hasReservations && <p>기간 내 예약 객실박 (추정): {o.occupied_room_nights}박 / 가용 객실박: {o.available_room_nights}박</p>}
       <p>전월 비교: {s.comparisons.previous_month.period.start_date} ~ {s.comparisons.previous_month.period.end_date} · 전년 비교: {s.comparisons.previous_year.period.start_date} ~ {s.comparisons.previous_year.period.end_date}</p>
     </div>
     <DashboardCharts items={trends.items} />
@@ -97,6 +99,6 @@ export function DashboardView({ summary: s, trends }: { summary: DashboardSummar
         {q.warnings.map((warning) => <li key={warning.code}>{warning.message}</li>)}</ul>
       <p className="mt-3 text-xs">체크인 기준 UNKNOWN {q.unknown_status_count}건 · 수수료 입력 {q.channel_fee_known_count}건 / 미입력 {q.channel_fee_missing_count}건</p>
     </aside>}
-    <footer className="text-xs text-slate-500">출처: 소유자 예약 CSV / 직접 입력 운영비 · 등록 자료 기준 · {s.metadata.calculation_version}</footer>
+    <footer className="text-xs text-slate-500">출처: 소유자 예약 CSV / 직접 입력 운영비{s.metadata.calculation_version === "dashboard-v2" && " / 객실 운영 입력"} · 등록 자료 기준 · {s.metadata.calculation_version}</footer>
   </section>;
 }

@@ -59,7 +59,7 @@ export function PropertyForm({ organizationId, property }: { organizationId: str
     <label>도로명 주소<input name="road_address" maxLength={500} defaultValue={property?.road_address ?? ""} className="field" /></label>
     <label>숙소 유형<select name="type" defaultValue={property?.accommodation_type ?? "HOTEL"} className="field">{Object.entries(typeLabels).map(([value,label]) =>
       <option key={value} value={value}>{label}</option>)}</select></label>
-    <label>객실 수<input name="inventory_units" type="number" min={1} max={2147483647} step={1} defaultValue={property?.inventory_units ?? 1} required className="field" /></label>
+    <label>기본 객실 수 (이력 없는 날짜의 추정값)<input name="inventory_units" type="number" min={1} max={2147483647} step={1} defaultValue={property?.inventory_units ?? 1} required className="field" /></label>
     <label>부산 구·군<select name="region_id" className="field" value={regionId}
       disabled={busy || regionState !== "ready"} aria-describedby="region-help region-status"
       onChange={(event) => setRegionId(event.target.value)}>

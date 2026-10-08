@@ -70,6 +70,7 @@ def upsert_rows(
             "check_out",
             "booked_nights",
             "guest_count",
+            "room_units",
             "gross_revenue",
             "channel_fee",
             "net_revenue",

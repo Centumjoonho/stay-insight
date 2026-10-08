@@ -110,3 +110,11 @@ For deterministic type checking while the development type generator is affected
 
 This does not alter the server's bundler, generated files in its running container, or TypeScript
 configuration. Run production builds in an isolated container as above rather than over the dev cache.
+
+## Phase 11 UI transition
+
+The primary dashboard now calls explicit dashboard-v2 endpoints. Financial/channel/expense
+sections and comparisons remain, with date-effective capacity and reservation room units for
+operational metrics. Existing v1 endpoints and backend tests are unchanged. Navigate through
+객실 운영 to manage history/exclusions. See [v2 contract](dashboard-v2.md) and
+[inventory workflow](inventory-availability.md). Earlier v1-only descriptions are historical.

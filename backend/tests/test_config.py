@@ -28,6 +28,8 @@ def test_database_configuration_without_connection() -> None:
         "app.reservation_imports",
         "app.reservations",
         "app.expenses",
+        "app.property_capacity_periods",
+        "app.property_availability_overrides",
         "app.regions",
         "app.public_accommodation_licenses",
         "app.public_data_sync_runs",

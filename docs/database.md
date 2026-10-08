@@ -187,3 +187,21 @@ Migration 0007_tourism_visitor_daily follows 0006. Adds app.tourism_visitor_dail
 ## Phase 10B event persistence
 
 Additive 0008_tourism_events follows 0007. app.tourism_events stores source+contentid unique identity, exact existing region FK, new legal-dong source codes, title/start/end DATE, nullable address/raw source status and UTC observation/audit timestamps. Date/source/code constraints and (region_id,start_date) index. Runtime SELECT; ingestion SELECT/INSERT/UPDATE, no DELETE. public_data_sync_runs adds nullable event_coverage JSONB; no owner table or old migration changes. [Event lifecycle and query contract](events.md).
+
+## Phase 11 additive migration 0009_inventory_availability
+
+Parent: 0008_tourism_events (verified code head before implementation). Adds nullable
+reservations.room_units INTEGER CHECK (>0); existing rows retain null. No backfill.
+Runtime receives UPDATE(room_units), preserving existing identity restrictions.
+
+New tenant tables: property_capacity_periods and property_availability_overrides.
+UUID identity, organization FK, composite organization/property FK, UTC audit timestamps.
+Capacity: effective_from/effective_to inclusive, inventory_units >0, no overlap via btree_gist
+GiST exclusion on property_id and daterange. Scoped start-date B-tree supports history reads.
+Availability: unique organization/property/date, unavailable_units >=0, explicit reason enum,
+optional VARCHAR(1000) memo. Unique index supports date lookups; no room_units index.
+Both ENABLE/FORCE RLS; minimum runtime column grants; no ingestion grants.
+Cross-table bounds are transactionally validated with a shared property row lock.
+No existing data is rewritten; rollback removes only new schema (and would discard new
+inventory data). Never downgrade the application DB merely for testing. Shared btree_gist
+is not removed on downgrade. See [inventory](inventory-availability.md).

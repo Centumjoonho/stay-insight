@@ -98,3 +98,17 @@ Automated tests use signed local JWT fixtures/dependency overrides only in tests
 Migration 0002_csv_imports follows unchanged 0001_foundation. Tests exercise downgrade to Phase 2 and re-upgrade while retaining organizations/properties; downgrade intentionally removes Phase 3 data and is not a routine operational command.
 
 See [API](api.md), [database](database.md) and [Phase 3 verification](phase3-verification.md).
+
+## Phase 11 optional room_units
+
+The generic mapping adds optional room_units (positive integer <=2,147,483,647). Empty or
+unmapped values store null, never an asserted 1. Zero/negative/fractional/non-numeric values
+invalidate the row and prevent the atomic import. Preview still shows original CSV columns;
+map the room column explicitly. Validation and confirmation disclose replacement semantics.
+Reservation lists show known units or 미입력.
+
+Existing whole-row upsert semantics apply: a new file with the same property/channel/external
+reservation ID replaces room_units too; an omitted/empty mapping clears the prior value.
+Unchanged completed duplicate files remain no-ops. Existing optional fields/limits/encodings
+and generic-v1 adapter identity are preserved. No OTA parser or manual reservation CRUD.
+Dashboard-v1 ignores room_units; [v2](dashboard-v2.md) estimates 1 only for null calculations.

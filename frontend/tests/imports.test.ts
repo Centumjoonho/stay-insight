@@ -43,7 +43,7 @@ test("mapping requires explicit distinct existing columns", () => {
   const html = renderToStaticMarkup(createElement(views.MappingFields, {
     headers, mapping: {}, onChange: () => {}, disabled: true,
   }));
-  assert.equal((html.match(/<select /g) ?? []).length, 7);
+  assert.equal((html.match(/<select /g) ?? []).length, 8);
   assert.equal((html.match(/ required=""/g) ?? []).length, 4);
   assert.ok(html.includes("<fieldset disabled="));
   assert.ok(!html.includes('value="예약번호" selected'));

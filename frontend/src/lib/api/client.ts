@@ -1,3 +1,4 @@
+import type { CapacityPeriod, CapacityValues, AvailabilityRecord, AvailabilityValues } from "./inventory-types";
 import type { MarketRegion } from "./region-types";
 import type { Expense, ExpenseValues } from "./expense-types";
 import type { Channel, ColumnMapping, CsvPreview, ImportResult, ValidationResult } from "./import-types";
@@ -23,6 +24,14 @@ async function request<T>(path: string, options?: RequestInit, organizationId?: 
 }
 
 export const businessApi = {
+  saveCapacity: (org: string, prop: string, body: CapacityValues, id?: string) =>
+    request<CapacityPeriod>(`/api/v1/properties/${prop}/capacity${id ? "/" + id : ""}`, { method: id ? "PATCH" : "POST", body: JSON.stringify({effective_from:body.effective_from, effective_to:body.effective_to, inventory_units:body.inventory_units}) }, org),
+  deleteCapacity: (org: string, prop: string, id: string) =>
+    request<void>(`/api/v1/properties/${prop}/capacity/${id}`, { method: "DELETE" }, org),
+  saveAvailability: (org: string, prop: string, day: string, body: AvailabilityValues) =>
+    request<AvailabilityRecord>(`/api/v1/properties/${prop}/availability/${day}`, { method: "POST", body: JSON.stringify(body) }, org),
+  deleteAvailability: (org: string, prop: string, day: string) =>
+    request<void>(`/api/v1/properties/${prop}/availability/${day}`, { method: "DELETE" }, org),
   regions: () => request<MarketRegion[]>("/api/v1/regions?" + new URLSearchParams({ sido: "부산광역시", level: "SIGUNGU" })),
   updateProperty: (org: string, id: string, body: Partial<PropertyCreate>) =>
     request<PropertyResponse>("/api/v1/properties/" + encodeURIComponent(id), { method: "PATCH", body: JSON.stringify(body) }, org),

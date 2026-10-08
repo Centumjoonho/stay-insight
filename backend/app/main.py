@@ -8,10 +8,12 @@ from fastapi.responses import JSONResponse
 
 from app.api.upload_limit import ImportBodyLimit
 from app.api.v1.dashboard import router as dashboard_router
+from app.api.v1.dashboard_v2 import router as dashboard_v2_router
 from app.api.v1.expenses import router as expenses_router
 from app.api.v1.foundation import router as foundation_router
 from app.api.v1.health import router as health_router
 from app.api.v1.imports import router as imports_router
+from app.api.v1.inventory import router as inventory_router
 from app.api.v1.market import router as market_router
 from app.api.v1.ready import router as ready_router
 from app.api.v1.regions import router as regions_router
@@ -71,6 +73,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.include_router(imports_router, prefix="/api/v1")
     application.include_router(expenses_router, prefix="/api/v1")
     application.include_router(dashboard_router, prefix="/api/v1")
+    application.include_router(dashboard_v2_router, prefix="/api/v1")
+    application.include_router(inventory_router, prefix="/api/v1")
     application.include_router(market_router, prefix="/api/v1")
     application.include_router(regions_router, prefix="/api/v1")
     return application

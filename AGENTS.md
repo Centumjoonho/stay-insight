@@ -62,3 +62,7 @@ Read [next steps](docs/next-steps.md) for the user's recorded priority before pr
 ## Phase 7 self-service property region
 
 [Property regions](docs/property-region.md) supersedes the Phase 6 admin-only/address-snapshot association rule. Optional normalized Busan selection is available through authenticated property create/edit. Migration 0005 grants only region_id UPDATE; tenant RLS, Phase 6 sync/metrics and dashboard-v1 remain unchanged. Read [verification](docs/phase7-verification.md) before subsequent work. Existing next-session notes above are historical priorities, now addressed by Phase 7.
+
+## Completion delivery preference
+
+After completing requested work and passing the required checks, commit the task changes and push the current branch to its configured remote. The user explicitly authorized this as the default on 2026-10-08. A later task-specific instruction not to commit or push takes precedence. Never include secrets or unrelated changes; report a failed check or push instead of claiming completion.

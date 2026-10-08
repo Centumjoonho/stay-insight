@@ -4,6 +4,7 @@ export const mappingFields = [
   ["external_reservation_id", "예약번호", true], ["check_in", "체크인", true],
   ["check_out", "체크아웃", true], ["gross_revenue", "총 매출", true],
   ["channel_fee", "플랫폼 수수료", false], ["guest_count", "투숙 인원", false],
+  ["room_units", "객실 수 (선택)", false],
   ["reservation_status", "상태", false],
 ] as const;
 

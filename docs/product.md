@@ -131,3 +131,13 @@ See [property-region.md](property-region.md).
 ## Implemented Phase 9B visitor-daily-v1
 
 Official daily estimated regional indicators appear only in 지역 시장, separately for 현지인(a), 외지인(b), 외국인(c). Latest observed day anchors complete 7/28-day averages and adjacent 7-day change; missing observations suppress affected metrics and chart values. No official monthly visitors or category total is produced. These indicators are not hotel guests, demand, bookings or owner performance. [Exact metric, rounding and coverage contract](tourism-visitors.md).
+
+## Implemented Phase 11 operational capacity
+
+Owners can enter aggregate date-effective room capacity and date-level rooms withheld from
+sale. CSV can report rooms consumed by a reservation; unknown values remain null. The primary
+dashboard uses [dashboard-v2](dashboard-v2.md), improving room-night estimates while preserving
+v1 financial rules. Explicit history supersedes default capacity by date. Missing history and
+room counts are visible estimates, not verified historical facts. Public market observations
+are separate. No individual rooms, assignments, manual reservation CRUD, OTA sync or forecasts.
+See [inventory contract](inventory-availability.md).

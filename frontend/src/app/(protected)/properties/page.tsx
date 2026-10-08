@@ -13,7 +13,7 @@ export default async function PropertiesPage({ searchParams }: { searchParams: P
     {!properties.total && <p className="mt-8">등록한 숙소가 없습니다.</p>}
     <ul className="mt-6 grid gap-3">{properties.items.map((property) => <li key={property.id} className="rounded border bg-white p-4">
       <Link href={`/properties/${property.id}`} className="font-semibold underline">{property.name}</Link>
-      <p>{property.address}</p><p>객실 수: {property.inventory_units}</p>
+      <p>{property.address}</p><p>기본 객실 수: {property.inventory_units}</p>
     </li>)}</ul>
     <nav aria-label="페이지" className="mt-6 flex gap-4">
       {page > 1 && <Link href={`/properties?page=${page-1}`}>이전</Link>}

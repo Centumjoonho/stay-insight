@@ -17,6 +17,7 @@ export interface ImportResult {
 export interface Reservation {
   id: string; external_reservation_id: string; channel: Channel; import_id: string;
   check_in: string; check_out: string; booked_nights: number; guest_count: number | null;
+  room_units: number | null;
   gross_revenue: string; channel_fee: string | null; net_revenue: string | null;
   reservation_status: ReservationStatus;
 }

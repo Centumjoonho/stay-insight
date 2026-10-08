@@ -14,6 +14,7 @@ class ColumnMapping(BaseModel):
     check_out: str = Field(min_length=1, max_length=100)
     gross_revenue: str = Field(min_length=1, max_length=100)
     channel_fee: str | None = None
+    room_units: str | None = None
     guest_count: str | None = None
     reservation_status: str | None = None
 
@@ -81,6 +82,7 @@ class ReservationResponse(BaseModel):
     check_in: date
     check_out: date
     booked_nights: int
+    room_units: int | None
     guest_count: int | None
     gross_revenue: Decimal
     channel_fee: Decimal | None

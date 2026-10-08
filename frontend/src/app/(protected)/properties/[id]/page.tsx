@@ -16,10 +16,11 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
       <div><dt>주소</dt><dd>{property.address}</dd></div>
       <div><dt>도로명 주소</dt><dd>{property.road_address || "미입력"}</dd></div>
       <div><dt>숙소 유형</dt><dd>{property.accommodation_type}</dd></div>
-      <div><dt>객실 수</dt><dd>{property.inventory_units}</dd></div>
+      <div><dt>기본 객실 수 (이력 없는 날짜의 추정값)</dt><dd>{property.inventory_units}</dd></div>
       <div><dt>시간대</dt><dd>{property.timezone}</dd></div>
       <div><dt>위도 / 경도</dt><dd>{property.latitude ?? "미입력"} / {property.longitude ?? "미입력"}</dd></div>
     </dl>
+    <Link className="underline" href={`/properties/${id}/inventory`}>객실 운영 · 이력 / 판매 제외</Link>
     <nav className="mt-6 flex flex-wrap gap-4">
       <Link className="underline" href={"/properties/" + id + "/edit"}>숙소 정보 수정</Link>
       <Link className="underline" href={`/properties/${id}/market`}>지역 시장</Link>

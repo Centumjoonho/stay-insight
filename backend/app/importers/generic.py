@@ -41,6 +41,7 @@ class NormalizedRow:
     channel_fee: Decimal | None
     net_revenue: Decimal | None
     reservation_status: str
+    room_units: int | None = None
 
 
 class CsvAdapter(Protocol):
@@ -157,6 +158,14 @@ class GenericCsvAdapter:
                     guest = int(values[field])
                     if guest < 1:
                         raise ValueError
+                field = "room_units"
+                units = None
+                if values.get(field):
+                    if not re.fullmatch(r"[0-9]{1,10}", values[field]):
+                        raise ValueError
+                    units = int(values[field])
+                    if not 1 <= units <= 2147483647:
+                        raise ValueError
                 field = "reservation_status"
                 status = values.get(field) or "UNKNOWN"
                 if status not in {"CONFIRMED", "CANCELLED", "UNKNOWN"}:
@@ -172,6 +181,7 @@ class GenericCsvAdapter:
                         fee,
                         gross - fee if fee is not None else None,
                         status,
+                        units,
                     )
                 )
             except ValueError:
@@ -191,6 +201,10 @@ class GenericCsvAdapter:
             errors=errors,
             errors_truncated=invalid > MAX_ERRORS,
             warnings=document.warnings
+            + [
+                "객실 수 미입력은 null로 저장합니다. "
+                "동일 예약 갱신 시 생략한 객실 수도 미입력으로 대체됩니다."
+            ]
             + [
                 "KRW 정수, YYYY-MM-DD 날짜, 상태 CONFIRMED/CANCELLED/UNKNOWN만 지원합니다.",
                 "오류가 있으면 전체 가져오기를 취소합니다. 기존 예약번호는 현재 값으로 갱신합니다.",

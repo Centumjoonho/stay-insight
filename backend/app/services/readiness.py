@@ -12,8 +12,13 @@ REQUIRED_TABLES = (
     "regions",
     "public_accommodation_licenses",
     "public_data_sync_runs",
+    "property_capacity_periods",
+    "property_availability_overrides",
 )
-TENANT_TABLES = set(REQUIRED_TABLES[:6])
+TENANT_TABLES = set(REQUIRED_TABLES[:6]) | {
+    "property_capacity_periods",
+    "property_availability_overrides",
+}
 
 
 def ready(engine: Engine) -> bool:

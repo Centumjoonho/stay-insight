@@ -19,7 +19,7 @@ export function DashboardCharts({ items }: { items: DashboardTrend[] }) {
       </ResponsiveContainer></div>
     </section>
     <section aria-label="월별 점유율 추이" className="min-w-0 rounded-xl border border-slate-200 bg-white p-5">
-      <h2 className="text-lg font-semibold">월별 점유율 추이 · 추정</h2><p className="mb-5 text-sm text-slate-600">등록 객실 수 기준 달력 점유율 (%)</p>
+      <h2 className="text-lg font-semibold">월별 점유율 추이 · 추정</h2><p className="mb-5 text-sm text-slate-600">예약 자료 기반 점유율 (%)</p>
       <div className="h-72 w-full"><ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <LineChart data={data} accessibilityLayer margin={{ top: 5, right: 12, bottom: 5, left: 0 }}>
           <CartesianGrid strokeDasharray="3 3" vertical={false} /><XAxis dataKey="month" tick={{ fontSize: 11 }} />

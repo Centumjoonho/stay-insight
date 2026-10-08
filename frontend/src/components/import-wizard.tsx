@@ -53,7 +53,7 @@ export function ImportWizard({ propertyId, organizationId }: { propertyId: strin
       <ValidationSummary result={validation} />
       <label><input type="checkbox" checked={confirmed} disabled={busy || validation.invalid_rows > 0}
         onChange={(e) => setConfirmed(e.target.checked)} /> 총 매출과 수수료의 의미를 확인했습니다.
-        동일 예약번호의 기존 값이 갱신되는 것에 동의합니다.</label>
+        동일 예약번호의 기존 값이 갱신되는 것에 동의합니다. 객실 수는 선택 항목이며, 생략하면 기존 객실 수도 미입력으로 대체됩니다.</label>
       <button className="action" disabled={busy || !confirmed || validation.invalid_rows > 0 || result?.status === "COMPLETED"}
         onClick={() => run(async () => {
           if (file) setResult(await businessApi.importCsv(organizationId, propertyId, channel, mapping, file));

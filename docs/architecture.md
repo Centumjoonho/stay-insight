@@ -228,3 +228,18 @@ Operating profit is NOT implemented in Phase 4. See [expenses.md](expenses.md).
 - ADR-055: Verified KorService2 legal-dong codes resolve to existing Busan regions by exact name. Separate tourism_events identity is source+contentid; preserve optional address/raw status only. Omit unverified detail URLs, coordinates, category labels and timestamp normalization; no media.
 - ADR-056: Migration 0008 adds events and nullable event_coverage audit. Separate dataset lock, runtime SELECT/minimal ingestion grants, atomic publication, no missing-row deletion and no owner metric changes. Initial bounded pagination uses observed size 2; unverified provider-wide empty shape fails closed rather than inventing a contract.
 - ADR-057: Stored-data property-authorized event reads distinguish no region, no sync, outside collection window and valid empty. Inclusive overlap, date-only temporal status, deterministic ordering, counts independent of result limit and source/impact warnings. No event scheduler or Phase 11. See [event contract](events.md).
+
+## Phase 11 decisions
+
+- ADR-058: Date-effective aggregate capacity is authoritative for v2. Existing inventory_units
+  stays an explicitly labeled compatibility/default value for gaps and v1; do not synchronize
+  it automatically or fabricate history. Nullable reservation room_units remains unknown until
+  supplied; estimation occurs only in v2 calculations.
+- ADR-059: Add tenant tables with composite FKs, forced RLS and minimum grants. Use btree_gist
+  exclusion for overlap and one scoped property row lock across all inventory/default writers.
+  Validate existing exclusions on period edits/removal and default reductions. This avoids
+  write skew without a queue, new service, or room-level PMS entities.
+- ADR-060: Separate dashboard-v2 endpoints and schemas reuse frozen v1 financial/comparison
+  functions while replacing operational denominators. Primary UI adopts v2 with source/estimate
+  warnings; public metrics remain separate. Preserve CSV whole-row replacement for room_units,
+  with explicit confirmation and tests. No application dependencies added.

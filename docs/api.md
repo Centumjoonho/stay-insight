@@ -177,3 +177,26 @@ GET /api/v1/market/visitors?property_id=UUID&category=2&days=90 is implemented. 
 ## Phase 10B events
 
 GET /api/v1/market/events: required property_id; optional from_date/to_date and limit 1–100. Default today through +90 days, max date difference180. JWT/membership/scoped-property checks precede shared event reads. Source metadata and coverage separate from owner/visitor data; no upstream calls during HTTP request. [Full response/state/sort contract](events.md).
+
+## Phase 11 owner inventory and dashboard-v2
+
+All routes use existing JWT + organization membership + scoped property authorization.
+
+| Method | Path under /api/v1 | Contract |
+| --- | --- | --- |
+| GET / POST | /properties/{id}/capacity | List all (API maximum 1,000) / create period |
+| PATCH / DELETE | /properties/{id}/capacity/{period_id} | Full editable period values / delete |
+| GET | /properties/{id}/availability?start=YYYY-MM-DD&end=YYYY-MM-DD | Daily values, <=366 days inclusive |
+| POST / DELETE | /properties/{id}/availability/{YYYY-MM-DD} | Upsert one date / delete |
+| GET | /dashboard-v2/summary?property_id={id}&month=YYYY-MM | v2 summary and comparisons |
+| GET | /dashboard-v2/trends?property_id={id}&month=YYYY-MM&months=12 | v2 trends, 1–24 months |
+
+Capacity body: effective_from, effective_to (nullable), inventory_units (>0).
+Availability body: unavailable_units (>=0), reason (MAINTENANCE/OWNER_BLOCK/SALES_STOP/OTHER),
+memo (nullable, <=1,000 chars). Responses include id and audit timestamps; daily rows also
+expose base_capacity, available_units, capacity_source and optional override.
+POST/PATCH return 200; DELETE 204. Foreign property/row 404, invalid values 422, period overlap
+or invalidating existing exclusions 409. PATCH capacity supplies the full editable period.
+No organization/identity fields accepted in mutation bodies.
+Reservation responses add nullable room_units. Optional CSV mapping key is room_units.
+Existing dashboard-v1 routes remain unchanged. See [v2](dashboard-v2.md).

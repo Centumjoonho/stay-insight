@@ -88,7 +88,10 @@ def update_property(
     property_id: UUID,
     body: PropertyPatch,
 ) -> Property:
-    item = get_property(db, org_id, property_id)
+    # Shared property row lock serializes default capacity and availability changes.
+    from app.services.inventory import locked_property, validate_existing_overrides
+
+    item = locked_property(db, org_id, property_id)
     merged = PropertyCreate.model_validate(item, from_attributes=True).model_dump()
     changes = body.model_dump(exclude_unset=True)
     try:
@@ -97,6 +100,8 @@ def update_property(
         raise HTTPException(422, "Invalid property values or coordinate pair") from error
     if "region_id" in body.model_fields_set:
         validate_region(db, body.region_id)
+    if body.inventory_units is not None:
+        validate_existing_overrides(db, org_id, property_id, body.inventory_units)
     updated = repo.save_property(db, org_id, property_id, changes)
     if updated is None:
         raise HTTPException(404, "Property not found")

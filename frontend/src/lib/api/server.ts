@@ -1,3 +1,4 @@
+import type { CapacityPeriod, AvailabilityDay } from "./inventory-types";
 import type { EventMarket } from "./event-types";
 import type { VisitorMarket } from "./visitor-types";
 import type { AccommodationMarket } from "./market-types";
@@ -34,6 +35,13 @@ async function request<T>(path: string, organizationId?: string): Promise<T> {
 }
 
 export const serverApi = {
+  capacity: (org: string, prop: string) => request<CapacityPeriod[]>(`/api/v1/properties/${prop}/capacity`, org),
+  availability: (org: string, prop: string, start: string, end: string) =>
+    request<AvailabilityDay[]>(`/api/v1/properties/${prop}/availability?` + new URLSearchParams({start,end}), org),
+  dashboardV2Summary: (org: string, property: string, month?: string) =>
+    request<DashboardSummary>("/api/v1/dashboard-v2/summary?" + new URLSearchParams({ property_id: property, ...(month ? { month } : {}) }), org),
+  dashboardV2Trends: (org: string, property: string, month?: string) =>
+    request<DashboardTrends>("/api/v1/dashboard-v2/trends?" + new URLSearchParams({ property_id: property, months: "12", ...(month ? { month } : {}) }), org),
   eventMarket: (org: string, property: string) =>
     request<EventMarket>("/api/v1/market/events?" + new URLSearchParams({ property_id: property }), org),
   visitorMarket: (org: string, property: string, category = "2") =>
