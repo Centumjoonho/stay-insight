@@ -35,13 +35,13 @@ test("capacity ranges reject overlap and allow adjacent or own edited period", (
 
 test("reservation list displays reported room units and unknown without fabricating 1", () => {
   const { ReservationTable } = load("../src/components/reservation-table.tsx") as typeof import("../src/components/reservation-table.tsx");
-  const base: Reservation = { id: "a", external_reservation_id: "R", channel: "GENERIC", import_id: "i", check_in: "2026-09-01", check_out: "2026-09-04", booked_nights: 3, guest_count: 2, room_units: 2, gross_revenue: "100", channel_fee: "0", net_revenue: "100", reservation_status: "CONFIRMED" };
+  const base: Reservation = { property_id: "prop", origin: "CSV_IMPORT", version: 1, manual_protected_fields: [], id: "a", external_reservation_id: "R", channel: "GENERIC", import_id: "i", check_in: "2026-09-01", check_out: "2026-09-04", booked_nights: 3, guest_count: 2, room_units: 2, gross_revenue: "100", channel_fee: "0", net_revenue: "100", reservation_status: "CONFIRMED" };
   const html = renderToStaticMarkup(createElement(ReservationTable, { items: [base, { ...base, id: "b", room_units: null }] }));
   assert.ok(html.includes("객실 수"));
   const dom = new JSDOM(html);
   const rows = dom.window.document.querySelectorAll("tbody tr");
-  assert.equal(rows[0].children[6].textContent, "2");
-  assert.equal(rows[1].children[6].textContent, "미입력");
+  assert.equal(rows[0].children[7].textContent, "2");
+  assert.equal(rows[1].children[7].textContent, "미입력");
   dom.window.close();
 });
 

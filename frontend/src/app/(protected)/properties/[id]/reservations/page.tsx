@@ -19,8 +19,8 @@ export default async function Reservations({ params, searchParams }: {
   const result = await serverApi.reservations(org.organization_id, query.toString());
   const page = (next: number) => { const q = new URLSearchParams(filters); q.set("offset", String(next)); return "?" + q; };
   return <section><h1 className="text-2xl font-semibold">{property.name} · 예약 목록</h1>
-    <p>출처: 소유자 CSV · 날짜 필터는 체크인일 기준(양 끝 포함)입니다. 순매출은 총 매출에서 입력한 수수료만 차감한 값입니다.</p>
-    <form className="my-4 flex flex-wrap items-end gap-3">
+    <p>출처: 소유자 CSV / 직접 입력 · 날짜 필터는 체크인일 기준(양 끝 포함)입니다. 순매출은 총 매출에서 입력한 수수료만 차감한 값입니다.</p>
+    <div className="my-4"><Link className="action inline-flex items-center justify-center" href={`/properties/${id}/reservations/new`}>예약 직접 등록</Link></div><form className="my-4 flex flex-wrap items-end gap-3">
       <label>시작일<input className="field" type="date" name="from" defaultValue={value("from")} /></label>
       <label>종료일<input className="field" type="date" name="to" defaultValue={value("to")} /></label>
       <label>채널<select className="field" name="channel" defaultValue={value("channel")}><option value="">전체</option>

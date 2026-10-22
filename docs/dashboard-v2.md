@@ -59,3 +59,10 @@ persisted KPI cache. Trend window is bounded to 24 months. Large real-customer v
 require measured overlap-query optimization later; no production-scale benchmark is claimed.
 
 See [inventory](inventory-availability.md), [frozen v1](metrics.md), [verification](phase11-verification.md).
+
+## Phase 12 effective inputs
+
+Manual room_units/date/money/status corrections feed the existing v2 calculations.
+Original formula implementation is unchanged. Owner-reservation provenance and UI
+source caption include CSV/manual/corrections; no dashboard-v3, no actual-stay claim.
+See [manual correction and CSV policy](manual-reservations.md).

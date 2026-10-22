@@ -105,3 +105,12 @@ All dashboard-v1 definitions above remain frozen. The main UI now uses a separat
 [dashboard-v2](dashboard-v2.md), whose room-night denominators use explicit capacity history,
 sales exclusions and optional reservation room_units. Financial recognition and comparison
 rules remain the same. Do not retroactively reinterpret stored v1 results as v2.
+
+## Phase 12 input correction
+
+No formula, status rule, date basis or calculation version changes. Both dashboards
+consume the effective reservation row after manual/CSV mutations. Cancellation uses
+existing CANCELLED exclusion; reopening uses existing eligible statuses. Audit rows
+and protections never contribute to metrics. revenue_source is now owner_reservations
+because inputs include CSV, manual entries and manual corrections. Existing estimate
+and known-profit language remains. This does not add verified completion or refunds.

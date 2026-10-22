@@ -113,6 +113,12 @@ def import_csv(
                         "completed_at": datetime.now(UTC),
                     },
                 )
+        except HTTPException as error:
+            changes["error_message"] = (
+                "수동 예약과 CSV 예약번호가 충돌합니다. 예약번호와 채널을 확인해 주세요."
+            )
+            if error.status_code != 409:
+                changes["error_message"] = "예약 변경을 취소했습니다. 입력 조합을 확인해 주세요."
         except Exception:
             # Driver exception parameters can include raw values; never log them.
             changes["error_message"] = "예약 변경을 취소했습니다. 다시 시도해 주세요."
@@ -147,7 +153,9 @@ def reservation_detail(db: Session, org: UUID, item_id: UUID) -> ReservationResp
     item = repo.get_reservation(db, org, item_id)
     if item is None:
         raise HTTPException(404, "예약을 찾을 수 없습니다.")
-    return ReservationResponse.model_validate(item)
+    from app.services.reservations import response
+
+    return response(db, org, item)
 
 
 def reservation_list(
@@ -168,6 +176,16 @@ def reservation_list(
     items, total = repo.list_reservations(
         db, org, property_id, channel, from_date, to_date, status, limit, offset
     )
-    return ReservationList(
-        items=[ReservationResponse.model_validate(item) for item in items], total=total
-    )
+    from app.repositories.reservations import protections
+
+    protected = protections(db, org, [item.id for item in items])
+    results = [
+        ReservationResponse.model_validate(item).model_copy(
+            update={
+                "manual_protected_fields": protected.get(item.id, []),
+                "source": "owner_manual" if item.origin == "MANUAL" else "owner_csv",
+            }
+        )
+        for item in items
+    ]
+    return ReservationList(items=results, total=total)

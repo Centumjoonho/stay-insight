@@ -1,3 +1,4 @@
+import type { AuditEvent } from "@/lib/reservations";
 import type { CapacityPeriod, AvailabilityDay } from "./inventory-types";
 import type { EventMarket } from "./event-types";
 import type { VisitorMarket } from "./visitor-types";
@@ -35,6 +36,8 @@ async function request<T>(path: string, organizationId?: string): Promise<T> {
 }
 
 export const serverApi = {
+  reservation: (org: string, id: string) => request<Reservation>(`/api/v1/reservations/${id}`, org),
+  reservationHistory: (org: string, id: string, offset = 0) => request<Page<AuditEvent>>(`/api/v1/reservations/${id}/history?limit=50&offset=${offset}`, org),
   capacity: (org: string, prop: string) => request<CapacityPeriod[]>(`/api/v1/properties/${prop}/capacity`, org),
   availability: (org: string, prop: string, start: string, end: string) =>
     request<AvailabilityDay[]>(`/api/v1/properties/${prop}/availability?` + new URLSearchParams({start,end}), org),

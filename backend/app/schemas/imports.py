@@ -63,6 +63,7 @@ class ImportResponse(BaseModel):
     validation_errors: list[RowError]
     column_mapping: dict[str, str]
     adapter_version: str
+    protected_fields_count: int = 0
     duplicate: bool = False
 
 
@@ -76,9 +77,12 @@ class ReservationResponse(BaseModel):
     id: UUID
     organization_id: UUID
     property_id: UUID
-    import_id: UUID
+    import_id: UUID | None
+    origin: str
+    version: int
+    manual_protected_fields: list[str] = Field(default_factory=list)
     channel: Channel
-    external_reservation_id: str
+    external_reservation_id: str | None
     check_in: date
     check_out: date
     booked_nights: int

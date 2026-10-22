@@ -243,3 +243,20 @@ Operating profit is NOT implemented in Phase 4. See [expenses.md](expenses.md).
   functions while replacing operational denominators. Primary UI adopts v2 with source/estimate
   warnings; public metrics remain separate. Preserve CSV whole-row replacement for room_units,
   with explicit confirmation and tests. No application dependencies added.
+
+## Phase 12 decisions
+
+- ADR-061: Reservation UUID remains canonical. Origin CSV_IMPORT/MANUAL is immutable;
+  nullable external/import IDs allow real manual records without fake OTA identities.
+  Preserve non-null property/channel/external identity uniqueness across both origins.
+- ADR-062: Effective row plus normalized per-field protections, no shadow baseline.
+  CSV merges protected current values with unprotected whole-source values, validates
+  the merged row, then atomically publishes or rolls back the whole batch.
+- ADR-063: Shared channel advisory lock for CSV/manual insertion, deterministic UUID
+  row locks for CSV, single-row lock for edit/release. expected_version rejects stale
+  writes. Protection release increments version; no-op mutations do not.
+- ADR-064: Append-only audit grants, tenant forced RLS and composite FKs; actor comes
+  from verified auth context and INSERT policy. No historical audit fabrication.
+  Source metadata includes manual inputs; no v3 or KPI formula change.
+
+See [manual reservations](manual-reservations.md) and [audit](reservation-audit.md).

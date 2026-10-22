@@ -11,11 +11,12 @@ export interface ImportResult {
   id: string; property_id: string; channel: Channel; original_filename: string;
   status: "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED";
   total_rows: number; imported_rows: number; rejected_rows: number;
-  inserted_rows: number; updated_rows: number; created_at: string;
+  protected_fields_count?: number; inserted_rows: number; updated_rows: number; created_at: string;
   error_message: string | null; validation_errors: RowError[]; duplicate: boolean;
 }
 export interface Reservation {
-  id: string; external_reservation_id: string; channel: Channel; import_id: string;
+  id: string; property_id: string; external_reservation_id: string | null; channel: Channel; import_id: string | null;
+  origin: "CSV_IMPORT" | "MANUAL"; version: number; manual_protected_fields: string[];
   check_in: string; check_out: string; booked_nights: number; guest_count: number | null;
   room_units: number | null;
   gross_revenue: string; channel_fee: string | null; net_revenue: string | null;

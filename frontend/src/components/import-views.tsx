@@ -43,6 +43,7 @@ export function ImportResultView({ result }: { result: ImportResult }) {
   return <section aria-label="가져오기 결과"><h2>6. 가져오기 결과</h2>
     <p>{result.status === "COMPLETED" ? "가져오기 완료" : "가져오기 실패"}</p>
     {result.duplicate && <p>이미 가져온 파일입니다. 기존 결과를 표시합니다.</p>}
+    <p>수동 보정으로 보호된 항목 {result.protected_fields_count ?? 0}개를 보존했습니다. 보호되지 않은 항목은 기존 CSV 갱신 규칙을 따릅니다.</p>
     <dl><div><dt>총 행</dt><dd>{result.total_rows}건</dd></div>
       <div><dt>처리 완료</dt><dd>{result.imported_rows}건</dd></div>
       <div><dt>신규 / 갱신</dt><dd>{result.inserted_rows} / {result.updated_rows}건</dd></div>

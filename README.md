@@ -191,3 +191,11 @@ Apply additive migration 0009_inventory_availability locally, then rebuild front
 source). No cloud deployment or public-data refresh is part of this phase.
 [Inventory usage](docs/inventory-availability.md) · [v2 calculations](docs/dashboard-v2.md) ·
 [Verification and commands](docs/phase11-verification.md).
+
+## Phase 12 manual reservations
+
+Manual create/edit/cancel/reopen, field-level CSV protection, immutable audit reads
+and version conflicts are implemented locally. Apply 0010_manual_reservations with
+the established local administrator migration command; rebuild frontend after edits.
+No new environment variable or dependency. See [manual workflow](docs/manual-reservations.md),
+[audit/security](docs/reservation-audit.md), [verification status](docs/phase12-verification.md).

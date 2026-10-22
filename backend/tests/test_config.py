@@ -27,6 +27,8 @@ def test_database_configuration_without_connection() -> None:
         "app.properties",
         "app.reservation_imports",
         "app.reservations",
+        "app.reservation_manual_overrides",
+        "app.reservation_audit_events",
         "app.expenses",
         "app.property_capacity_periods",
         "app.property_availability_overrides",

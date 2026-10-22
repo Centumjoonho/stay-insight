@@ -16,7 +16,7 @@ class InventoryQuality(DataQuality):
 class ProvenanceV2(BaseModel):
     calculation_version: Literal["dashboard-v2"] = "dashboard-v2"
     source: Literal["owner"] = "owner"
-    revenue_source: Literal["owner_csv"] = "owner_csv"
+    revenue_source: Literal["owner_reservations"] = "owner_reservations"
     expense_source: Literal["MANUAL"] = "MANUAL"
     financial_date_basis: Literal["check_in"] = "check_in"
     operational_date_basis: Literal["overlapping_nights"] = "overlapping_nights"

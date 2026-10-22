@@ -17,6 +17,7 @@ from app.api.v1.inventory import router as inventory_router
 from app.api.v1.market import router as market_router
 from app.api.v1.ready import router as ready_router
 from app.api.v1.regions import router as regions_router
+from app.api.v1.reservations import router as reservations_router
 from app.core.config import Settings, get_settings
 
 
@@ -71,6 +72,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.include_router(ready_router, prefix="/api/v1")
     application.include_router(foundation_router, prefix="/api/v1")
     application.include_router(imports_router, prefix="/api/v1")
+    application.include_router(reservations_router, prefix="/api/v1")
     application.include_router(expenses_router, prefix="/api/v1")
     application.include_router(dashboard_router, prefix="/api/v1")
     application.include_router(dashboard_v2_router, prefix="/api/v1")

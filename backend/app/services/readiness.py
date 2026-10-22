@@ -12,10 +12,14 @@ REQUIRED_TABLES = (
     "regions",
     "public_accommodation_licenses",
     "public_data_sync_runs",
+    "reservation_manual_overrides",
+    "reservation_audit_events",
     "property_capacity_periods",
     "property_availability_overrides",
 )
 TENANT_TABLES = set(REQUIRED_TABLES[:6]) | {
+    "reservation_manual_overrides",
+    "reservation_audit_events",
     "property_capacity_periods",
     "property_availability_overrides",
 }

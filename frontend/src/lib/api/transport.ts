@@ -37,7 +37,7 @@ export async function apiRequest<T>(
       401: "로그인이 만료되었습니다. 다시 로그인해 주세요.",
       403: "이 사업장에 접근할 권한이 없습니다.",
       404: path.startsWith("/api/v1/expenses") ? "비용을 찾을 수 없습니다." : "숙소를 찾을 수 없습니다.",
-      409: path.startsWith("/api/v1/properties/")
+      409: path.includes("/reservations") ? "다른 변경이 먼저 저장되었거나 예약번호가 중복되었습니다. 최신 내용을 다시 확인해 주세요." : path.startsWith("/api/v1/properties/")
         ? "기간이 겹치거나 기존 판매 제외 기록보다 객실 수가 작습니다. 이력과 판매 제외 기록을 확인해 주세요."
         : "이미 사업장 등록을 완료했습니다. 내 숙소로 이동해 주세요.",
       413: "파일이 너무 큽니다. CSV는 5 MiB / 10,000행 이하여야 합니다.",

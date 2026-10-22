@@ -205,3 +205,14 @@ Cross-table bounds are transactionally validated with a shared property row lock
 No existing data is rewritten; rollback removes only new schema (and would discard new
 inventory data). Never downgrade the application DB merely for testing. Shared btree_gist
 is not removed on downgrade. See [inventory](inventory-availability.md).
+
+## Implemented Phase 12
+
+0010_manual_reservations adds immutable origin, positive version, nullable manual
+external/import IDs and scoped composite reservation identity. Existing rows are
+CSV_IMPORT/version 1, preserving all business values. Adds protected_fields_count
+on imports and two forced-RLS tenant tables with minimum runtime grants and no
+public-ingestion access. Audit index serves scoped newest-first history; unique
+reservation+field serves override lookups. No DELETE grant for reservations or
+UPDATE/DELETE for audit. [Schema/security](reservation-audit.md).
+Downgrade refuses when MANUAL data cannot be represented in the previous schema.

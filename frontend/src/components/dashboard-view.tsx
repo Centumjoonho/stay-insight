@@ -99,6 +99,6 @@ export function DashboardView({ summary: s, trends }: { summary: DashboardSummar
         {q.warnings.map((warning) => <li key={warning.code}>{warning.message}</li>)}</ul>
       <p className="mt-3 text-xs">체크인 기준 UNKNOWN {q.unknown_status_count}건 · 수수료 입력 {q.channel_fee_known_count}건 / 미입력 {q.channel_fee_missing_count}건</p>
     </aside>}
-    <footer className="text-xs text-slate-500">출처: 소유자 예약 CSV / 직접 입력 운영비{s.metadata.calculation_version === "dashboard-v2" && " / 객실 운영 입력"} · 등록 자료 기준 · {s.metadata.calculation_version}</footer>
+    <footer className="text-xs text-slate-500">출처: 소유자 예약 (CSV·직접 입력·수동 보정) / 직접 입력 운영비{s.metadata.calculation_version === "dashboard-v2" && " / 객실 운영 입력"} · 등록 자료 기준 · {s.metadata.calculation_version}</footer>
   </section>;
 }

@@ -141,3 +141,12 @@ v1 financial rules. Explicit history supersedes default capacity by date. Missin
 room counts are visible estimates, not verified historical facts. Public market observations
 are separate. No individual rooms, assignments, manual reservation CRUD, OTA sync or forecasts.
 See [inventory contract](inventory-availability.md).
+
+## Implemented Phase 12 reservation corrections
+
+[Manual reservations](manual-reservations.md) adds direct create/edit and audited
+cancel/reopen through existing status values; no deletion. Imported rows protect
+only manually changed fields from later CSV overwrite; owners can explicitly release
+protection without changing the current value. Version guards reject stale writes.
+[Append-only history](reservation-audit.md) begins at Phase 12, with authenticated
+actors and bounded reasons. No actual-stay/refund/accounting change is implied.

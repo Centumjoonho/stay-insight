@@ -81,6 +81,7 @@ class ReservationImport(Base):
     column_mapping: Mapped[dict[str, str]] = mapped_column(JSONB)
     validation_errors: Mapped[list[dict[str, object]]] = mapped_column(JSONB, default=list)
     adapter_version: Mapped[str] = mapped_column(String(30), default="generic-v1")
+    protected_fields_count: Mapped[int] = mapped_column(default=0, server_default="0")
 
 
 class Reservation(Base):
@@ -99,6 +100,9 @@ class Reservation(Base):
             ],
         ),
         UniqueConstraint("property_id", "channel", "external_reservation_id"),
+        UniqueConstraint("organization_id", "property_id", "id"),
+        CheckConstraint("origin IN ('CSV_IMPORT','MANUAL')"),
+        CheckConstraint("version > 0"),
         CheckConstraint(CHANNEL_CHECK),
         CheckConstraint("check_out > check_in AND booked_nights = check_out - check_in"),
         CheckConstraint("guest_count IS NULL OR guest_count >= 1"),
@@ -120,9 +124,13 @@ class Reservation(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     organization_id: Mapped[UUID] = mapped_column(ForeignKey("app.organizations.id"))
     property_id: Mapped[UUID]
-    import_id: Mapped[UUID]
+    import_id: Mapped[UUID | None]
+    origin: Mapped[str] = mapped_column(
+        String(20), default="CSV_IMPORT", server_default="CSV_IMPORT"
+    )
+    version: Mapped[int] = mapped_column(default=1, server_default="1")
     channel: Mapped[str] = mapped_column(String(20))
-    external_reservation_id: Mapped[str] = mapped_column(String(200))
+    external_reservation_id: Mapped[str | None] = mapped_column(String(200))
     check_in: Mapped[date] = mapped_column(Date)
     check_out: Mapped[date] = mapped_column(Date)
     booked_nights: Mapped[int]

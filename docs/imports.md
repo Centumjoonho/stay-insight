@@ -112,3 +112,16 @@ reservation ID replaces room_units too; an omitted/empty mapping clears the prio
 Unchanged completed duplicate files remain no-ops. Existing optional fields/limits/encodings
 and generic-v1 adapter identity are preserved. No OTA parser or manual reservation CRUD.
 Dashboard-v1 ignores room_units; [v2](dashboard-v2.md) estimates 1 only for null calculations.
+
+## Phase 12 superseding conflict contract
+
+The existing matching key and completed-file idempotency remain. Unprotected
+optional fields still replace with null/UNKNOWN when omitted. Manually changed
+fields on CSV_IMPORT rows are preserved individually; others continue to update.
+No auto-merge with MANUAL origins. Invalid merged constraints or manual identity
+collision fail the whole batch. Response protected_fields_count reports retained
+field occurrences. updated_rows remains matched rows, not effective-change count.
+Only effective changes increment version and create CSV_UPDATE audit; pure skips
+preserve version/updated_at/import_id. Release keeps current values; a later NEW
+file can overwrite. Identical already-completed bytes remain a no-op after release.
+See [exact behavior](manual-reservations.md) and [audit](reservation-audit.md).

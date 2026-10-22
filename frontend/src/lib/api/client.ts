@@ -1,7 +1,7 @@
 import type { CapacityPeriod, CapacityValues, AvailabilityRecord, AvailabilityValues } from "./inventory-types";
 import type { MarketRegion } from "./region-types";
 import type { Expense, ExpenseValues } from "./expense-types";
-import type { Channel, ColumnMapping, CsvPreview, ImportResult, ValidationResult } from "./import-types";
+import type { Reservation, Channel, ColumnMapping, CsvPreview, ImportResult, ValidationResult } from "./import-types";
 import { importForm } from "@/lib/imports";
 import { browserAuth } from "@/lib/supabase/client";
 import { apiRequest, ApiError } from "./transport";
@@ -24,6 +24,9 @@ async function request<T>(path: string, options?: RequestInit, organizationId?: 
 }
 
 export const businessApi = {
+  createReservation: (org: string, prop: string, body: object) => request<Reservation>(`/api/v1/properties/${prop}/reservations`, {method:"POST",body:JSON.stringify(body)}, org),
+  updateReservation: (org: string, id: string, body: object) => request<Reservation>(`/api/v1/reservations/${id}`, {method:"PATCH",body:JSON.stringify(body)}, org),
+  releaseReservation: (org: string, id: string, body: object) => request<Reservation>(`/api/v1/reservations/${id}/release-overrides`, {method:"POST",body:JSON.stringify(body)}, org),
   saveCapacity: (org: string, prop: string, body: CapacityValues, id?: string) =>
     request<CapacityPeriod>(`/api/v1/properties/${prop}/capacity${id ? "/" + id : ""}`, { method: id ? "PATCH" : "POST", body: JSON.stringify({effective_from:body.effective_from, effective_to:body.effective_to, inventory_units:body.inventory_units}) }, org),
   deleteCapacity: (org: string, prop: string, id: string) =>

@@ -200,3 +200,19 @@ or invalidating existing exclusions 409. PATCH capacity supplies the full editab
 No organization/identity fields accepted in mutation bodies.
 Reservation responses add nullable room_units. Optional CSV mapping key is room_units.
 Existing dashboard-v1 routes remain unchanged. See [v2](dashboard-v2.md).
+
+## Phase 12 reservation mutations
+
+[Manual contract](manual-reservations.md) supersedes CSV-only origin/read semantics.
+POST /api/v1/properties/{property_id}/reservations creates MANUAL (no import_id).
+PATCH /api/v1/reservations/{id} accepts only supplied mutable fields plus required
+expected_version and change_reason. Status change also cancels/reopens with audit.
+POST /api/v1/reservations/{id}/release-overrides accepts known fields, expected_version,
+change_reason; preserves current values and returns updated version/protections.
+GET /api/v1/reservations/{id}/history supports limit 1–100, offset >=0, newest-first.
+Read/list return origin/version/manual_protected_fields; source owner_manual/owner_csv.
+Version mismatch 409 carries detail.code=RESERVATION_VERSION_CONFLICT; create identity
+collision 409 carries RESERVATION_IDENTITY_CONFLICT. No DELETE endpoint. Private/no-store,
+current membership, property authorization and forced RLS apply to all operations.
+Import responses add persisted protected_fields_count; manual identity collision
+returns existing-style FAILED import, explicit safe message, no partially imported rows.

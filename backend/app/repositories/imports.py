@@ -3,7 +3,6 @@ from datetime import date
 from uuid import UUID
 
 from sqlalchemy import func, select, text, update
-from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
 from app.importers.generic import NormalizedRow
@@ -39,54 +38,81 @@ def save_batch(db: Session, batch: ReservationImport) -> None:
 def upsert_rows(
     db: Session, batch: ReservationImport, rows: list[NormalizedRow]
 ) -> tuple[int, int]:
-    existing = set(
-        db.scalars(
-            select(Reservation.external_reservation_id).where(
+    from fastapi import HTTPException
+
+    from app.repositories import reservations as manual
+    from app.schemas.reservations import ReservationValues
+    from app.services.reservations import apply
+
+    # Same channel advisory lock as manual creation; rows ordered for deterministic locking.
+    existing = {
+        r.external_reservation_id: r
+        for r in db.scalars(
+            select(Reservation)
+            .where(
                 Reservation.organization_id == batch.organization_id,
                 Reservation.property_id == batch.property_id,
                 Reservation.channel == batch.channel,
                 Reservation.external_reservation_id.in_([r.external_reservation_id for r in rows]),
             )
+            .order_by(Reservation.id)
+            .with_for_update()
+            .execution_options(populate_existing=True)
         )
+    }
+    protected = manual.protections(db, batch.organization_id, [r.id for r in existing.values()])
+    inserted = updated = preserved = 0
+    for row in rows:
+        item = existing.get(row.external_reservation_id)
+        if item is not None and item.origin != "CSV_IMPORT":
+            raise HTTPException(409, "CSV_MANUAL_IDENTITY_CONFLICT")
+        raw = asdict(row)
+        if item is None:
+            item = Reservation(
+                **raw,
+                organization_id=batch.organization_id,
+                property_id=batch.property_id,
+                channel=batch.channel,
+                import_id=batch.id,
+                origin="CSV_IMPORT",
+                version=1,
+            )
+            db.add(item)
+            inserted += 1
+        else:
+            before = manual.snapshot(item)
+            fields = protected.get(item.id, [])
+            preserved += len(fields)
+            merged = {f: (getattr(item, f) if f in fields else raw[f]) for f in before}
+            # Individually valid CSV and manual values can form an invalid combined row.
+            # Reject the WHOLE batch in the existing savepoint, never partially publish.
+            values = ReservationValues.model_validate(merged)
+            changes = [f for f in before if getattr(item, f) != getattr(values, f)]
+            if changes:
+                apply(item, values)
+                item.version += 1
+                manual.audit(
+                    db,
+                    item,
+                    batch.created_by_user_id,
+                    "CSV_UPDATE",
+                    "CSV_IMPORT",
+                    {f: before[f] for f in changes},
+                    {f: manual.snapshot(item)[f] for f in changes},
+                    changes,
+                    import_id=batch.id,
+                )
+                item.import_id = batch.id
+            updated += 1
+    db.flush()
+    update_batch(
+        db,
+        batch.organization_id,
+        batch.property_id,
+        batch.id,
+        {"protected_fields_count": preserved},
     )
-    updated = sum(row.external_reservation_id in existing for row in rows)
-    # Bounded chunks stay below PostgreSQL's bind-parameter limit.
-    for start in range(0, len(rows), 250):
-        statement = insert(Reservation).values(
-            [
-                {
-                    **asdict(row),
-                    "organization_id": batch.organization_id,
-                    "property_id": batch.property_id,
-                    "channel": batch.channel,
-                    "import_id": batch.id,
-                }
-                for row in rows[start : start + 250]
-            ]
-        )
-        fields = (
-            "import_id",
-            "check_in",
-            "check_out",
-            "booked_nights",
-            "guest_count",
-            "room_units",
-            "gross_revenue",
-            "channel_fee",
-            "net_revenue",
-            "reservation_status",
-        )
-        statement = statement.on_conflict_do_update(
-            index_elements=["property_id", "channel", "external_reservation_id"],
-            set_={
-                **{field: getattr(statement.excluded, field) for field in fields},
-                "updated_at": func.now(),
-            },
-            where=(Reservation.organization_id == batch.organization_id)
-            & (Reservation.property_id == batch.property_id),
-        )
-        db.execute(statement)
-    return len(rows) - updated, updated
+    return inserted, updated
 
 
 def get_import(db: Session, org: UUID, item_id: UUID) -> ReservationImport | None:
