@@ -1,3 +1,4 @@
+import { sharedUi, sharedPropertyNav } from "./shared-ui.ts";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
@@ -16,7 +17,7 @@ function load(path: string, dependencies: Record<string, unknown> = {}, extra: R
   dependencies = { "next/link": {default:({href,children}:{href:string;children:ReactNode})=>createElement("a",{href},children)}, "@/lib/api/client": {businessApi:{}}, "@/lib/api/transport": {ApiError}, ...dependencies };
   runInNewContext(ts.transpileModule(readFileSync(new URL(path,import.meta.url),"utf8"), {
     compilerOptions:{module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.ReactJSX,target:ts.ScriptTarget.ES2022},
-  }).outputText,{exports,Error,...extra,require:(name:string)=>dependencies[name] ?? require(name)});
+  }).outputText,{exports,Error,...extra,require:(name:string)=>dependencies[name] ?? (name === "@/components/ui" ? sharedUi : name === "@/components/property-nav" ? sharedPropertyNav : require(name))});
   return exports;
 }
 const reservation: contracts.Reservation = {id:"res",property_id:"prop",external_reservation_id:"R1",import_id:"batch",origin:"CSV_IMPORT",version:2,manual_protected_fields:["room_units"],channel:"GENERIC",check_in:"2026-09-01",check_out:"2026-09-03",booked_nights:2,gross_revenue:"300000",channel_fee:null,net_revenue:null,guest_count:null,room_units:2,reservation_status:"CONFIRMED"};

@@ -1,3 +1,4 @@
+import { sharedUi, sharedPropertyNav } from "./shared-ui.ts";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
@@ -19,7 +20,7 @@ function load(path: string, dependencies: Record<string, unknown> = {}, extra: R
   const exports = {};
   runInNewContext(ts.transpileModule(readFileSync(new URL(path, import.meta.url), "utf8"), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022 },
-  }).outputText, { exports, Error, ...extra, require: (name: string) => dependencies[name] ?? require(name) });
+  }).outputText, { exports, Error, ...extra, require: (name: string) => dependencies[name] ?? (name === "@/components/ui" ? sharedUi : name === "@/components/property-nav" ? sharedPropertyNav : require(name)) });
   return exports;
 }
 const period: contracts.CapacityPeriod = { id: "capacity", effective_from: "2026-09-01", effective_to: "2026-09-30", inventory_units: 6, created_at: "", updated_at: "" };
@@ -40,8 +41,8 @@ test("reservation list displays reported room units and unknown without fabricat
   assert.ok(html.includes("객실 수"));
   const dom = new JSDOM(html);
   const rows = dom.window.document.querySelectorAll("tbody tr");
-  assert.equal(rows[0].children[7].textContent, "2");
-  assert.equal(rows[1].children[7].textContent, "미입력");
+  assert.equal(rows[0].querySelector('[data-label="객실 수"]')!.textContent, "2");
+  assert.equal(rows[1].querySelector('[data-label="객실 수"]')!.textContent, "미입력");
   dom.window.close();
 });
 

@@ -260,3 +260,6 @@ Operating profit is NOT implemented in Phase 4. See [expenses.md](expenses.md).
   Source metadata includes manual inputs; no v3 or KPI formula change.
 
 See [manual reservations](manual-reservations.md) and [audit](reservation-audit.md).
+## UI Wave 1 presentation decisions
+
+- ADR-065: Use a small server-compatible React/Tailwind UI layer and shared operational container; only pathname navigation, existing forms and charts need client behavior. Self-host version-pinned Noto Sans KR via Fontsource and lockfile integrity, without build-time font fetches or generated Pencil fonts. Preserve FastAPI authority, existing authentication, business contracts and calculation helpers. See [UI Wave 1](ui-implementation-wave1.md).

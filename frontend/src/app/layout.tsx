@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { AppHeader } from "@/components/app-header";
+import "@fontsource-variable/noto-sans-kr";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -11,13 +12,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko">
       <body>
-        <header className="border-b border-slate-200 bg-white px-6 py-5">
-          <nav aria-label="주 메뉴" className="mx-auto flex max-w-3xl items-center justify-between">
-            <Link href="/" className="text-lg font-semibold">Stay Insight</Link>
-            <Link href="/health" className="text-sm underline underline-offset-4">연결 상태</Link>
-          </nav>
-        </header>
-        <main className="mx-auto max-w-3xl px-6 py-16">{children}</main>
+        <AppHeader />
+        <main id="main-content" className="app-container">{children}</main>
       </body>
     </html>
   );

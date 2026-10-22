@@ -111,3 +111,7 @@ page bounds. Verified all five approved frames unchanged through Pencil node sna
 No frontend/backend/Docker/database files changed. Code tests/build were not rerun:
 this task changes design and documentation only. Pencil-generated font files were
 already untracked before this task and are excluded from the commit.
+
+## Frontend implementation — Wave 1
+
+The approved design is now translated into frontend presentation components. See [implementation and verification](ui-implementation-wave1.md) for current gates, deliberate differences and font strategy. Pencil frames remain unchanged.

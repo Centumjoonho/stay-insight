@@ -1,3 +1,4 @@
+import { sharedUi, sharedPropertyNav } from "./shared-ui.ts";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
@@ -16,7 +17,7 @@ function load(path: string, dependencies: Record<string, unknown>, globals = {})
   const exports = {};
   runInNewContext(ts.transpileModule(readFileSync(new URL(path, import.meta.url), "utf8"), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022 },
-  }).outputText, { exports, Error, process, URLSearchParams, ...globals, require: (name: string) => dependencies[name] ?? require(name) });
+  }).outputText, { exports, Error, process, URLSearchParams, ...globals, require: (name: string) => dependencies[name] ?? (name === "@/components/ui" ? sharedUi : name === "@/components/property-nav" ? sharedPropertyNav : require(name)) });
   return exports;
 }
 // Development/test fixtures only, never fallback data in the application.

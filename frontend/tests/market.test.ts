@@ -1,3 +1,4 @@
+import { sharedUi, sharedPropertyNav } from "./shared-ui.ts";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
@@ -14,7 +15,7 @@ function load(path: string, dependencies: Record<string, unknown>) {
   const exports = {};
   runInNewContext(ts.transpileModule(readFileSync(new URL(path, import.meta.url), "utf8"), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022 },
-  }).outputText, { exports, process, URLSearchParams, require: (name: string) => dependencies[name] ?? require(name) });
+  }).outputText, { exports, process, URLSearchParams, require: (name: string) => dependencies[name] ?? (name === "@/components/ui" ? sharedUi : name === "@/components/property-nav" ? sharedPropertyNav : require(name)) });
   return exports;
 }
 const links = { default: ({ href, children }: { href: string; children: ReactNode }) => createElement("a", { href }, children) };
